@@ -1,0 +1,32 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.constructorItemContainer,
+.itemWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.itemWrapper {
+  height: 460px;
+  overflow-y: scroll;
+}
+
+.constructorCard {
+  display: flex;
+  align-items: center;
+}
+
+.bottomBlockContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.totalContainer {
+  display: flex;
+  align-items: center;
+}
