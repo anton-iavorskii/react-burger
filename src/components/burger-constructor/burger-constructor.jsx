@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import BurgerConstructorStyles from './burger-constructor.module.css';
 import {
@@ -7,19 +7,36 @@ import {
   CurrencyIcon,
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-
-const BurgerConstructorPropTypes = PropTypes.shape({
-  _id: PropTypes.string,
-  type: PropTypes.string,
-  image: PropTypes.string,
-  price: PropTypes.number,
-  name: PropTypes.string,
-});
+import { dataIngredientsPropTypes } from '../../utils/common-types';
 
 const BurgerConstructor = ({ dataIngredients }) => {
-  const bun = dataIngredients.find(
-    (item) => item.name === 'Краторная булка N-200i'
-  );
+  const getBun = () => {
+    return dataIngredients.find((item) => item.type === 'bun');
+  };
+
+  const getIngridients = () => {
+    return dataIngredients.filter((item) => item.type !== 'bun');
+  };
+
+  const getTotalSum = () => {
+    let result = 0;
+    dataIngredients.forEach((item) => {
+      result += item.price;
+    });
+    return result;
+  };
+
+  const bun = useMemo(() => {
+    return getBun();
+  }, [dataIngredients]);
+
+  const ingridients = useMemo(() => {
+    return getIngridients();
+  }, [dataIngredients]);
+
+  const totalSum = useMemo(() => {
+    return getTotalSum();
+  }, [dataIngredients]);
 
   return (
     <section
@@ -36,23 +53,21 @@ const BurgerConstructor = ({ dataIngredients }) => {
           />
         </div>
         <div className={`custom-scroll ${BurgerConstructorStyles.itemWrapper}`}>
-          {dataIngredients.map((item) => {
-            if (item.type !== 'bun') {
-              return (
-                <div
-                  className={`${BurgerConstructorStyles.constructorCard}`}
-                  key={item._id}
-                >
-                  <DragIcon type="primary" />
-                  <ConstructorElement
-                    extraClass="mr-2 ml-2"
-                    text={item.name}
-                    price={item.price}
-                    thumbnail={item.image}
-                  />
-                </div>
-              );
-            }
+          {ingridients.map((item) => {
+            return (
+              <div
+                className={`${BurgerConstructorStyles.constructorCard}`}
+                key={item._id}
+              >
+                <DragIcon type="primary" />
+                <ConstructorElement
+                  extraClass="mr-2 ml-2"
+                  text={item.name}
+                  price={item.price}
+                  thumbnail={item.image}
+                />
+              </div>
+            );
           })}
         </div>
         <div className={`pl-8 ${BurgerConstructorStyles.constructorCard}`}>
@@ -67,7 +82,9 @@ const BurgerConstructor = ({ dataIngredients }) => {
       </div>
       <div className={`mt-10 ${BurgerConstructorStyles.bottomBlockContainer}`}>
         <div className={`mr-10 ${BurgerConstructorStyles.totalContainer}`}>
-          <span className={`text text_type_digits-medium mr-2`}>610</span>
+          <span className={`text text_type_digits-medium mr-2`}>
+            {totalSum}
+          </span>
           <CurrencyIcon type="primary" />
         </div>
         <Button htmlType="button" type="primary" size="medium">
@@ -79,7 +96,8 @@ const BurgerConstructor = ({ dataIngredients }) => {
 };
 
 BurgerConstructor.propTypes = {
-  dataIngredients: PropTypes.arrayOf(BurgerConstructorPropTypes).isRequired,
+  dataIngredients: PropTypes.arrayOf(dataIngredientsPropTypes.isRequired)
+    .isRequired,
 };
 
 export default BurgerConstructor;
