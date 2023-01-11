@@ -1,0 +1,15 @@
+.headerContainer {
+  width: 1310px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  margin-left: 130px;
+  margin-right: 287px;
+}
+
+.navContainer {
+  display: flex;
+}
