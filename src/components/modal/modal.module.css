@@ -1,0 +1,29 @@
+.modal {
+  width: 720px;
+  position: absolute;
+  top: 13%;
+  left: 27%;
+  background: #1c1c21;
+  border: 1px solid rgba(76, 76, 255, 0.2);
+  box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04),
+    0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04),
+    0px 0px 1px rgba(0, 0, 0, 0.04);
+  border-radius: 40px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.closeIconWrapper,
+.closeIconWrapperNoHeader {
+  cursor: pointer;
+}
+
+.closeIconWrapperNoHeader {
+  position: absolute;
+  right: 0;
+}

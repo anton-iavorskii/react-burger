@@ -7,9 +7,12 @@ import {
   CurrencyIcon,
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { dataIngredientsPropTypes } from '../../utils/common-types';
+import {
+  dataIngredientsPropTypes,
+  handleOpenModalPropTypes,
+} from '../../utils/common-types';
 
-const BurgerConstructor = ({ dataIngredients }) => {
+const BurgerConstructor = ({ dataIngredients, handleOpenModal }) => {
   const getBun = () => {
     return dataIngredients.find((item) => item.type === 'bun');
   };
@@ -43,7 +46,10 @@ const BurgerConstructor = ({ dataIngredients }) => {
       className={`pt-25 pr-4 pl-4 ml-10 ${BurgerConstructorStyles.wrapper}`}
     >
       <div className={BurgerConstructorStyles.constructorItemContainer}>
-        <div className={`pl-8 ${BurgerConstructorStyles.constructorCard}`}>
+        <div
+          className={`pl-8 ${BurgerConstructorStyles.constructorCard}`}
+          onClick={() => handleOpenModal({ id: bun._id, type: 'ingredients' })}
+        >
           <ConstructorElement
             type="top"
             isLocked={true}
@@ -58,6 +64,9 @@ const BurgerConstructor = ({ dataIngredients }) => {
               <div
                 className={`${BurgerConstructorStyles.constructorCard}`}
                 key={item._id}
+                onClick={() =>
+                  handleOpenModal({ id: item._id, type: 'ingredients' })
+                }
               >
                 <DragIcon type="primary" />
                 <ConstructorElement
@@ -70,7 +79,10 @@ const BurgerConstructor = ({ dataIngredients }) => {
             );
           })}
         </div>
-        <div className={`pl-8 ${BurgerConstructorStyles.constructorCard}`}>
+        <div
+          className={`pl-8 ${BurgerConstructorStyles.constructorCard}`}
+          onClick={() => handleOpenModal({ id: bun._id, type: 'ingredients' })}
+        >
           <ConstructorElement
             type="bottom"
             isLocked={true}
@@ -87,7 +99,12 @@ const BurgerConstructor = ({ dataIngredients }) => {
           </span>
           <CurrencyIcon type="primary" />
         </div>
-        <Button htmlType="button" type="primary" size="medium">
+        <Button
+          htmlType="button"
+          type="primary"
+          size="medium"
+          onClick={() => handleOpenModal({ id: bun._id, type: 'order' })}
+        >
           Оформить заказ
         </Button>
       </div>
@@ -98,6 +115,7 @@ const BurgerConstructor = ({ dataIngredients }) => {
 BurgerConstructor.propTypes = {
   dataIngredients: PropTypes.arrayOf(dataIngredientsPropTypes.isRequired)
     .isRequired,
+  handleOpenModal: handleOpenModalPropTypes.isRequired,
 };
 
 export default BurgerConstructor;

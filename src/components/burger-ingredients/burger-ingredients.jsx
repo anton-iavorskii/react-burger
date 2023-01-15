@@ -5,9 +5,12 @@ import {
   Tab,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { dataIngredientsPropTypes } from '../../utils/common-types';
+import {
+  dataIngredientsPropTypes,
+  handleOpenModalPropTypes,
+} from '../../utils/common-types';
 
-const BurgerIngredients = ({ dataIngredients }) => {
+const BurgerIngredients = ({ dataIngredients, handleOpenModal }) => {
   const bun = 'bun';
   const sauce = 'sauce';
   const filling = 'filling';
@@ -63,6 +66,9 @@ const BurgerIngredients = ({ dataIngredients }) => {
               <div
                 className={`pb-10 ${BurgerIngredientsStyles.productCard}`}
                 key={item._id}
+                onClick={() =>
+                  handleOpenModal({ id: item._id, type: 'ingredients' })
+                }
               >
                 <img className="mr-4 ml-4" src={item.image} alt="булка" />
                 <div
@@ -91,6 +97,9 @@ const BurgerIngredients = ({ dataIngredients }) => {
               <div
                 className={` pb-8 ${BurgerIngredientsStyles.productCard}`}
                 key={item._id}
+                onClick={() =>
+                  handleOpenModal({ id: item._id, type: 'ingredients' })
+                }
               >
                 <img className="mr-4 ml-4" src={item.image} alt="соус" />
                 <div
@@ -118,6 +127,7 @@ const BurgerIngredients = ({ dataIngredients }) => {
 BurgerIngredients.propTypes = {
   dataIngredients: PropTypes.arrayOf(dataIngredientsPropTypes.isRequired)
     .isRequired,
+  handleOpenModal: handleOpenModalPropTypes.isRequired,
 };
 
 export default BurgerIngredients;
