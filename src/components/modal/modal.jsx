@@ -11,7 +11,7 @@ import {
 
 const modalRoot = document.getElementById('react-modals');
 
-const Modal = ({ children, handleCloseModal, typeModal }) => {
+const Modal = ({ children, handleCloseModal, isHeader }) => {
   const escFunction = useCallback((event) => {
     if (event.key === 'Escape') {
       handleCloseModal();
@@ -29,7 +29,7 @@ const Modal = ({ children, handleCloseModal, typeModal }) => {
   return ReactDOM.createPortal(
     <ModalOverlay handleCloseModal={handleCloseModal}>
       <div className={ModalStyles.modal}>
-        {typeModal === 'ingredients' ? (
+        {isHeader ? (
           <header className={`mt-10 mr-10 ml-10 ${ModalStyles.header}`}>
             <h1 className="text text_type_main-large">Детали ингредиента</h1>
             <div className={ModalStyles.closeIconWrapper}>
@@ -53,7 +53,7 @@ const Modal = ({ children, handleCloseModal, typeModal }) => {
 Modal.propTypes = {
   children: childrenPropTypes.isRequired,
   handleCloseModal: handleCloseModalPropTypes.isRequired,
-  typeModal: PropTypes.string.isRequired,
+  isHeader: PropTypes.bool,
 };
 
 export default Modal;

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import BurgerConstructorStyles from './burger-constructor.module.css';
 import {
@@ -7,12 +7,21 @@ import {
   CurrencyIcon,
   Button,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import {
-  dataIngredientsPropTypes,
-  handleOpenModalPropTypes,
-} from '../../utils/common-types';
+import { dataIngredientsPropTypes } from '../../utils/common-types';
+import Modal from '../modal/modal';
+import OrderDetails from '../order-details/order-details';
 
-const BurgerConstructor = ({ dataIngredients, handleOpenModal }) => {
+const BurgerConstructor = ({ dataIngredients }) => {
+  const [isVisibleModal, setIsVisibleModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsVisibleModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsVisibleModal(false);
+  };
+
   const getBun = () => {
     return dataIngredients.find((item) => item.type === 'bun');
   };
@@ -42,80 +51,81 @@ const BurgerConstructor = ({ dataIngredients, handleOpenModal }) => {
   }, [dataIngredients]);
 
   return (
-    <section
-      className={`pt-25 pr-4 pl-4 ml-10 ${BurgerConstructorStyles.wrapper}`}
-    >
-      <div className={BurgerConstructorStyles.constructorItemContainer}>
+    <>
+      <section
+        className={`pt-25 pr-4 pl-4 ml-10 ${BurgerConstructorStyles.wrapper}`}
+      >
+        <div className={BurgerConstructorStyles.constructorItemContainer}>
+          <div className={`pl-8 ${BurgerConstructorStyles.constructorCard}`}>
+            <ConstructorElement
+              type="top"
+              isLocked={true}
+              text={bun.name + ' верх'}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          </div>
+          <div
+            className={`custom-scroll ${BurgerConstructorStyles.itemWrapper}`}
+          >
+            {ingridients.map((item) => {
+              return (
+                <div
+                  className={`${BurgerConstructorStyles.constructorCard}`}
+                  key={item._id}
+                >
+                  <DragIcon type="primary" />
+                  <ConstructorElement
+                    extraClass="mr-2 ml-2"
+                    text={item.name}
+                    price={item.price}
+                    thumbnail={item.image}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          <div className={`pl-8 ${BurgerConstructorStyles.constructorCard}`}>
+            <ConstructorElement
+              type="bottom"
+              isLocked={true}
+              text={bun.name + ' низ'}
+              price={bun.price}
+              thumbnail={bun.image}
+            />
+          </div>
+        </div>
         <div
-          className={`pl-8 ${BurgerConstructorStyles.constructorCard}`}
-          onClick={() => handleOpenModal({ id: bun._id, type: 'ingredients' })}
+          className={`mt-10 ${BurgerConstructorStyles.bottomBlockContainer}`}
         >
-          <ConstructorElement
-            type="top"
-            isLocked={true}
-            text={bun.name + ' верх'}
-            price={bun.price}
-            thumbnail={bun.image}
-          />
+          <div className={`mr-10 ${BurgerConstructorStyles.totalContainer}`}>
+            <span className={`text text_type_digits-medium mr-2`}>
+              {totalSum}
+            </span>
+            <CurrencyIcon type="primary" />
+          </div>
+          <Button
+            htmlType="button"
+            type="primary"
+            size="medium"
+            onClick={handleOpenModal}
+          >
+            Оформить заказ
+          </Button>
         </div>
-        <div className={`custom-scroll ${BurgerConstructorStyles.itemWrapper}`}>
-          {ingridients.map((item) => {
-            return (
-              <div
-                className={`${BurgerConstructorStyles.constructorCard}`}
-                key={item._id}
-                onClick={() =>
-                  handleOpenModal({ id: item._id, type: 'ingredients' })
-                }
-              >
-                <DragIcon type="primary" />
-                <ConstructorElement
-                  extraClass="mr-2 ml-2"
-                  text={item.name}
-                  price={item.price}
-                  thumbnail={item.image}
-                />
-              </div>
-            );
-          })}
-        </div>
-        <div
-          className={`pl-8 ${BurgerConstructorStyles.constructorCard}`}
-          onClick={() => handleOpenModal({ id: bun._id, type: 'ingredients' })}
-        >
-          <ConstructorElement
-            type="bottom"
-            isLocked={true}
-            text={bun.name + ' низ'}
-            price={bun.price}
-            thumbnail={bun.image}
-          />
-        </div>
-      </div>
-      <div className={`mt-10 ${BurgerConstructorStyles.bottomBlockContainer}`}>
-        <div className={`mr-10 ${BurgerConstructorStyles.totalContainer}`}>
-          <span className={`text text_type_digits-medium mr-2`}>
-            {totalSum}
-          </span>
-          <CurrencyIcon type="primary" />
-        </div>
-        <Button
-          htmlType="button"
-          type="primary"
-          size="medium"
-          onClick={() => handleOpenModal({ id: bun._id, type: 'order' })}
-        >
-          Оформить заказ
-        </Button>
-      </div>
-    </section>
+      </section>
+      {isVisibleModal && (
+        <Modal handleCloseModal={handleCloseModal}>
+          <OrderDetails />
+        </Modal>
+      )}
+    </>
   );
 };
 
 BurgerConstructor.propTypes = {
   dataIngredients: PropTypes.arrayOf(dataIngredientsPropTypes.isRequired)
     .isRequired,
-  handleOpenModal: handleOpenModalPropTypes.isRequired,
 };
 
 export default BurgerConstructor;
