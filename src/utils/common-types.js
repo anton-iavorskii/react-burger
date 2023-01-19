@@ -7,3 +7,9 @@ export const dataIngredientsPropTypes = PropTypes.shape({
   price: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
 });
+
+export const handleOpenModalPropTypes = PropTypes.func;
+
+export const handleCloseModalPropTypes = PropTypes.func;
+
+export const childrenPropTypes = PropTypes.element;
