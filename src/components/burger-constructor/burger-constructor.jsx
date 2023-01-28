@@ -11,8 +11,9 @@ import { dataIngredientsPropTypes } from '../../utils/common-types';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
 
-const BurgerConstructor = ({ dataIngredients }) => {
+const BurgerConstructor = () => {
   const [isVisibleModal, setIsVisibleModal] = useState(false);
+  const dataIngredients = [];
 
   const handleOpenModal = () => {
     setIsVisibleModal(true);
@@ -56,7 +57,7 @@ const BurgerConstructor = ({ dataIngredients }) => {
         className={`pt-25 pr-4 pl-4 ml-10 ${BurgerConstructorStyles.wrapper}`}
       >
         <div className={BurgerConstructorStyles.constructorItemContainer}>
-          <div className={`pl-8 ${BurgerConstructorStyles.constructorCard}`}>
+          {/* <div className={`pl-8 ${BurgerConstructorStyles.constructorCard}`}>
             <ConstructorElement
               type="top"
               isLocked={true}
@@ -93,7 +94,7 @@ const BurgerConstructor = ({ dataIngredients }) => {
               price={bun.price}
               thumbnail={bun.image}
             />
-          </div>
+          </div> */}
         </div>
         <div
           className={`mt-10 ${BurgerConstructorStyles.bottomBlockContainer}`}
@@ -121,11 +122,6 @@ const BurgerConstructor = ({ dataIngredients }) => {
       )}
     </>
   );
-};
-
-BurgerConstructor.propTypes = {
-  dataIngredients: PropTypes.arrayOf(dataIngredientsPropTypes.isRequired)
-    .isRequired,
 };
 
 export default BurgerConstructor;

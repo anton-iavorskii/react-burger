@@ -1,58 +1,73 @@
-import React, { useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useMemo, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import BurgerIngredientsStyles from './burger-ingredients.module.css';
 import {
   Tab,
   CurrencyIcon,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { dataIngredientsPropTypes } from '../../utils/common-types';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import {
+  getIngredients,
+  GET_BUNS,
+  GET_FILLINGS,
+  GET_SAUCES,
+  GET_INGREDIENT,
+  GET_MODAL_OPEN,
+  GET_MODAL_CLOSE,
+  TAB_SWITCH,
+} from '../../services/actions/ingredients';
+import { BUN, SAUSECES, FILLING } from '../../utils/consts';
 
-const BurgerIngredients = ({ dataIngredients }) => {
-  const bun = 'bun';
-  const sauce = 'sauce';
-  const filling = 'filling';
-  const [current, setCurrent] = useState(bun);
-  const [isVisibleModal, setIsVisibleModal] = useState(false);
-  const [ingredient, setIngredient] = useState();
+const BurgerIngredients = () => {
+  const dispatch = useDispatch();
+
+  const {
+    items,
+    itemsRequest,
+    itemsFailed,
+    buns,
+    sauces,
+    fillings,
+    ingredient,
+    isVisibleModal,
+    currentTab,
+  } = useSelector((store) => {
+    return {
+      items: store.allIngredients.items,
+      itemsRequest: store.allIngredients.itemsRequest,
+      itemsFailed: store.allIngredients.itemsFailed,
+      buns: store.allIngredients.buns,
+      sauces: store.allIngredients.sauces,
+      fillings: store.allIngredients.fillings,
+      ingredient: store.allIngredients.ingredient,
+      isVisibleModal: store.modal.isVisible,
+      currentTab: store.tabs.currentTab,
+    };
+  });
+
+  const handleTabs = (tabName) => {
+    dispatch({ type: TAB_SWITCH, tabName });
+  };
 
   const handleOpenModal = ({ id }) => {
-    getIngredient(id);
-    setIsVisibleModal(true);
+    dispatch({ type: GET_INGREDIENT, id });
+    dispatch({ type: GET_MODAL_OPEN });
   };
 
   const handleCloseModal = () => {
-    setIsVisibleModal(false);
+    dispatch({ type: GET_MODAL_CLOSE });
   };
 
-  const getIngredient = (id) => {
-    setIngredient(dataIngredients.find((item) => item._id === id));
-  };
+  useMemo(() => {
+    dispatch({ type: GET_BUNS });
+    dispatch({ type: GET_SAUCES });
+    dispatch({ type: GET_FILLINGS });
+  }, [items]);
 
-  const getAllBuns = () => {
-    return dataIngredients.filter((item) => item.type === bun);
-  };
-
-  const getAllSauces = () => {
-    return dataIngredients.filter((item) => item.type === sauce);
-  };
-
-  const getAllFilling = () => {
-    return dataIngredients.filter((item) => item.type === filling);
-  };
-
-  const allBuns = useMemo(() => {
-    return getAllBuns();
-  }, [dataIngredients]);
-
-  const allSauces = useMemo(() => {
-    return getAllSauces();
-  }, [dataIngredients]);
-
-  const allFilling = useMemo(() => {
-    return getAllFilling();
-  }, [dataIngredients]);
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, [dispatch]);
 
   return (
     <>
@@ -61,16 +76,20 @@ const BurgerIngredients = ({ dataIngredients }) => {
           Соберите бургер
         </h1>
         <div className={`mb-10 ${BurgerIngredientsStyles.tabWrapper}`}>
-          <Tab value={bun} active={current === bun} onClick={setCurrent}>
+          <Tab value={BUN} active={currentTab === BUN} onClick={handleTabs}>
             Булки
           </Tab>
-          <Tab value={sauce} active={current === sauce} onClick={setCurrent}>
+          <Tab
+            value={SAUSECES}
+            active={currentTab === SAUSECES}
+            onClick={handleTabs}
+          >
             Соусы
           </Tab>
           <Tab
-            value={filling}
-            active={current === filling}
-            onClick={setCurrent}
+            value={FILLING}
+            active={currentTab === FILLING}
+            onClick={handleTabs}
           >
             Начинки
           </Tab>
@@ -82,7 +101,7 @@ const BurgerIngredients = ({ dataIngredients }) => {
           <div
             className={`pt-6 pr-4 pl-4 ${BurgerIngredientsStyles.productsContainer}`}
           >
-            {allBuns.map((item) => {
+            {buns?.map((item) => {
               return (
                 <div
                   className={`pb-10 ${BurgerIngredientsStyles.productCard}`}
@@ -113,7 +132,7 @@ const BurgerIngredients = ({ dataIngredients }) => {
           <div
             className={`pt-6 pr-4 pl-4 ${BurgerIngredientsStyles.productsContainer}`}
           >
-            {allSauces.map((item) => {
+            {sauces.map((item) => {
               return (
                 <div
                   className={` pb-8 ${BurgerIngredientsStyles.productCard}`}
@@ -149,11 +168,6 @@ const BurgerIngredients = ({ dataIngredients }) => {
       )}
     </>
   );
-};
-
-BurgerIngredients.propTypes = {
-  dataIngredients: PropTypes.arrayOf(dataIngredientsPropTypes.isRequired)
-    .isRequired,
 };
 
 export default BurgerIngredients;
