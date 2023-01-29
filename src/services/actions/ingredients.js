@@ -3,9 +3,6 @@ import getFetch from '../../utils/getFetch';
 export const GET_INGREDIENTS_REQUEST = 'GET_INGREDIENTS_REQUEST';
 export const GET_INGREDIENTS_SUCCESS = 'GET_INGREDIENTS_SUCCESS';
 export const GET_INGREDIENTS_FAILED = 'GET_INGREDIENTS_FAILED';
-export const GET_BUNS = 'GET_BUNS';
-export const GET_SAUCES = 'GET_SAUCES';
-export const GET_FILLINGS = 'GET_FILLINGS';
 export const GET_INGREDIENT = 'GET_INGREDIENT';
 export const DELETE_INGREDIENT = 'DELETE_INGREDIENT';
 
