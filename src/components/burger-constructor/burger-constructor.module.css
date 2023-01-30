@@ -17,12 +17,6 @@
   overflow-y: scroll;
 }
 
-.constructorCard {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
 .bottomBlockContainer {
   display: flex;
   justify-content: flex-end;

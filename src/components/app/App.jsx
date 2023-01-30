@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import AppStyles from './app.module.css';
 import AppHeader from '../app-header/app-header';
@@ -9,12 +11,6 @@ import { getIngredients } from '../../services/actions/ingredients';
 
 const App = () => {
   const dispatch = useDispatch();
-  const { itemsRequest, itemsFailed } = useSelector((store) => {
-    return {
-      itemsRequest: store.allIngredients.itemsRequest,
-      itemsFailed: store.allIngredients.itemsFailed,
-    };
-  });
 
   useEffect(() => {
     dispatch(getIngredients());
@@ -24,8 +20,10 @@ const App = () => {
     <>
       <AppHeader />
       <main className={AppStyles.container}>
-        <BurgerIngredients />
-        <BurgerConstructor />
+        <DndProvider backend={HTML5Backend}>
+          <BurgerIngredients />
+          <BurgerConstructor />
+        </DndProvider>
       </main>
     </>
   );

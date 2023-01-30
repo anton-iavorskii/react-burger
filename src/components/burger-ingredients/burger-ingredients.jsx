@@ -1,18 +1,23 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useInView } from 'react-intersection-observer';
 import BurgerIngredientsStyles from './burger-ingredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import {
-  GET_MODAL_CLOSE,
   TAB_SWITCH,
+  GET_MODAL_INGREDIENT_CLOSE,
 } from '../../services/actions/ingredients';
 import { BUN, SAUSECES, FILLING } from '../../utils/consts';
 import IngredientCard from '../ingredient-card/ingredient-card';
 
 const BurgerIngredients = () => {
   const dispatch = useDispatch();
+  const refFilling = useRef(null);
+  const refBun = useRef(null);
+  const refSauce = useRef(null);
+  const refContainer = useRef(null);
 
   const { items, ingredient, isVisibleModal, currentTab } = useSelector(
     (store) => {
@@ -21,18 +26,42 @@ const BurgerIngredients = () => {
         itemsRequest: store.allIngredients.itemsRequest,
         itemsFailed: store.allIngredients.itemsFailed,
         ingredient: store.allIngredients.ingredient,
-        isVisibleModal: store.modal.isVisible,
+        isVisibleModal: store.modal.isVisibleIngredientModal,
         currentTab: store.tabs.currentTab,
       };
     }
   );
 
-  const handleTabs = (tabName) => {
-    dispatch({ type: TAB_SWITCH, tabName });
-  };
+  const [refBunsContainer, inViewBunsContainer] = useInView({
+    root: refContainer.current,
+    threshold: 1,
+  });
+
+  const [refSaucesContainer, inViewSaucesContainer] = useInView({
+    root: refContainer.current,
+    threshold: 1,
+  });
+
+  const [refFillingsContainer, inViewFillingsContainer] = useInView({
+    root: refContainer.current,
+    threshold: 0.4,
+  });
 
   const handleCloseModal = () => {
-    dispatch({ type: GET_MODAL_CLOSE });
+    dispatch({ type: GET_MODAL_INGREDIENT_CLOSE });
+  };
+
+  const handleTabs = (tabName) => {
+    dispatch({ type: TAB_SWITCH, tabName });
+    if (tabName === BUN) {
+      refBun.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+    if (tabName === SAUSECES) {
+      refSauce.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+    if (tabName === FILLING) {
+      refFilling.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
   };
 
   const sauces = useMemo(() => {
@@ -65,6 +94,35 @@ const BurgerIngredients = () => {
     });
   }, [fillings]);
 
+  useEffect(() => {
+    if (
+      inViewBunsContainer &&
+      inViewSaucesContainer &&
+      inViewFillingsContainer
+    ) {
+      return;
+    }
+    if (
+      inViewSaucesContainer &&
+      !inViewFillingsContainer &&
+      !inViewBunsContainer
+    ) {
+      dispatch({ type: TAB_SWITCH, tabName: SAUSECES });
+    } else if (
+      inViewFillingsContainer &&
+      !inViewSaucesContainer &&
+      !inViewBunsContainer
+    ) {
+      dispatch({ type: TAB_SWITCH, tabName: FILLING });
+    } else if (
+      inViewBunsContainer &&
+      !inViewFillingsContainer &&
+      !inViewSaucesContainer
+    ) {
+      dispatch({ type: TAB_SWITCH, tabName: BUN });
+    }
+  }, [inViewSaucesContainer, inViewFillingsContainer, inViewBunsContainer]);
+
   return (
     <>
       <section>
@@ -92,24 +150,37 @@ const BurgerIngredients = () => {
         </div>
         <article
           className={`custom-scroll ${BurgerIngredientsStyles.articleContainer}`}
+          ref={refContainer}
         >
-          <h2 className="text text_type_main-medium">Булки</h2>
-          <div
-            className={`pt-6 pr-4 pl-4 ${BurgerIngredientsStyles.productsContainer}`}
-          >
-            {contentBuns}
+          <div ref={refBunsContainer}>
+            <h2 className="text text_type_main-medium" ref={refBun}>
+              Булки
+            </h2>
+            <div
+              className={`pt-6 pr-4 pl-4 ${BurgerIngredientsStyles.productsContainer}`}
+            >
+              {contentBuns}
+            </div>
           </div>
-          <h2 className="text text_type_main-medium">Соусы</h2>
-          <div
-            className={`pt-6 pr-4 pl-4 ${BurgerIngredientsStyles.productsContainer}`}
-          >
-            {contentSauces}
+          <div ref={refSaucesContainer}>
+            <h2 className="text text_type_main-medium" ref={refSauce}>
+              Соусы
+            </h2>
+            <div
+              className={`pt-6 pr-4 pl-4 ${BurgerIngredientsStyles.productsContainer}`}
+            >
+              {contentSauces}
+            </div>
           </div>
-          <h2 className="text text_type_main-medium">Начинки</h2>
-          <div
-            className={`pt-6 pr-4 pl-4 ${BurgerIngredientsStyles.productsContainer}`}
-          >
-            {contentFillings}
+          <div ref={refFillingsContainer}>
+            <h2 className="text text_type_main-medium" ref={refFilling}>
+              Начинки
+            </h2>
+            <div
+              className={`pt-6 pr-4 pl-4 ${BurgerIngredientsStyles.productsContainer}`}
+            >
+              {contentFillings}
+            </div>
           </div>
         </article>
       </section>
