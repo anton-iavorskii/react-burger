@@ -20,8 +20,6 @@ export const GET_MODAL_INGREDIENT_CLOSE = 'GET_MODAL_INGREDIENT_CLOSE';
 export const GET_MODAL_ORDER_OPEN = 'GET_MODAL_ORDER_OPEN';
 export const GET_MODAL_ORDER_CLOSE = 'GET_MODAL_ORDER_CLOSE';
 
-export const TAB_SWITCH = 'TAB_SWITCH';
-
 export function getIngredients() {
   return function (dispatch) {
     dispatch({

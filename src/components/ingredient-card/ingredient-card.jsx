@@ -9,6 +9,7 @@ import {
   GET_MODAL_INGREDIENT_OPEN,
 } from '../../services/actions/ingredients';
 import { dataIngredientsPropTypes } from '../../utils/common-types';
+import { BUN } from '../../utils/consts';
 
 const IngredientCard = ({ item }) => {
   const dispatch = useDispatch();
@@ -51,7 +52,7 @@ const IngredientCard = ({ item }) => {
           <span
             className={`text text_type_digits-default ${IngredientCardStyles.counter}`}
           >
-            {count}
+            {item.type === BUN ? count * 2 : count}
           </span>
         )}
         <img className="mr-4 ml-4" src={item.image} alt="булка" />

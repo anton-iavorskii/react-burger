@@ -8,7 +8,6 @@ import {
   GET_MODAL_INGREDIENT_OPEN,
   GET_MODAL_ORDER_OPEN,
   GET_MODAL_ORDER_CLOSE,
-  TAB_SWITCH,
   ADD_CONSTRUCTOR_INGREDIENT,
   REORDER_CONSTRUCTOR_INGREDIENTS,
   DELETE_CONSTRUCTOR_INGREDIENT,
@@ -31,10 +30,6 @@ const allIngredientsInitialState = {
 const modalInitialState = {
   isVisibleIngredientModal: false,
   isVisibleOrderModal: false,
-};
-
-const tabsInitialState = {
-  currentTab: 'bun',
 };
 
 export const allIngredientsReducer = (
@@ -62,7 +57,7 @@ export const allIngredientsReducer = (
     case GET_INGREDIENT: {
       return {
         ...state,
-        ingredient: [...state.items].find((item) => item._id === action.id),
+        ingredient: state.items.find((item) => item._id === action.id),
       };
     }
     case ADD_CONSTRUCTOR_INGREDIENT: {
@@ -77,12 +72,12 @@ export const allIngredientsReducer = (
         constructorItems: !bun
           ? [
               ...state.constructorItems,
-              [...state.items].find((item) => item._id === action.id),
+              state.items.find((item) => item._id === action.id),
             ]
           : bun && newItem.type !== BUN
           ? [
               ...state.constructorItems,
-              [...state.items].find((item) => item._id === action.id),
+              state.items.find((item) => item._id === action.id),
             ]
           : [...notBuns, newItem],
       };
@@ -161,28 +156,6 @@ export const modalReducer = (state = modalInitialState, action) => {
         isVisibleOrderModal: false,
       };
     }
-    default: {
-      return state;
-    }
-  }
-};
-
-export const tabsReducer = (state = tabsInitialState, action) => {
-  switch (action.type) {
-    case TAB_SWITCH: {
-      return {
-        ...state,
-        currentTab:
-          action.tabName === BUN
-            ? BUN
-            : action.tabName === SAUSECES
-            ? SAUSECES
-            : action.tabName === FILLING
-            ? FILLING
-            : '',
-      };
-    }
-
     default: {
       return state;
     }

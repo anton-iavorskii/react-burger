@@ -59,28 +59,28 @@ const ConstructorCard = ({ item, index }) => {
       item.index = hoverIndex;
     },
   });
-  const [{ isDragging }, drag] = useDrag({
+  const [{ opacity }, drag] = useDrag({
     type: 'constructor',
     item: () => {
       return { index };
     },
     collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
+      opacity: monitor.isDragging() ? 0.5 : 1,
     }),
   });
 
   drag(drop(ref));
 
-  const handlerDelete = () => {
+  const handleDeleteIngredient = () => {
     dispatch({ type: DELETE_CONSTRUCTOR_INGREDIENT, index });
   };
 
   return (
     <div
       className={`${BurgerConstructorStyles.constructorCard}`}
-      key={item._id}
       ref={ref}
       data-handler-id={handlerId}
+      style={{ opacity }}
     >
       <DragIcon type="primary" />
       <ConstructorElement
@@ -88,7 +88,7 @@ const ConstructorCard = ({ item, index }) => {
         text={item.name}
         price={item.price}
         thumbnail={item.image}
-        handleClose={handlerDelete}
+        handleClose={handleDeleteIngredient}
       />
     </div>
   );

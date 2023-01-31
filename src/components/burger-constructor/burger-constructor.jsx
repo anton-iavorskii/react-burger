@@ -32,17 +32,15 @@ const BurgerConstructor = () => {
   const [, dropTarget] = useDrop({
     accept: 'ingredient',
     drop(itemId) {
-      onDropHandler(itemId);
+      dispatch({ type: ADD_CONSTRUCTOR_INGREDIENT, id: itemId.id });
     },
   });
 
-  const onDropHandler = (itemId) => {
-    dispatch({ type: ADD_CONSTRUCTOR_INGREDIENT, id: itemId.id });
-  };
-
   const handleOpenModal = () => {
     const itemsId = constructorItems.map((item) => item._id);
-    dispatch(getOrder({ ingredients: itemsId }));
+    dispatch(
+      getOrder({ ingredients: bun ? [...itemsId, bun._id] : [itemsId] })
+    );
     dispatch({ type: GET_MODAL_ORDER_OPEN });
   };
 
@@ -51,15 +49,11 @@ const BurgerConstructor = () => {
   };
 
   const getTotalSum = () => {
-    let result = 0;
-    constructorItems.forEach((item) => {
-      let price = item.price;
-      if (item.type === BUN) {
-        price = price * 2;
-      }
-      result += price;
-    });
-    return result;
+    return constructorItems.reduce(
+      (accum, item) =>
+        item.type === BUN ? accum + item.price * 2 : accum + item.price,
+      0
+    );
   };
 
   const totalSum = useMemo(() => {
@@ -74,7 +68,7 @@ const BurgerConstructor = () => {
     return constructorItems.map((item, index) => {
       return (
         item.type !== BUN && (
-          <ConstructorCard key={index} item={item} index={index} />
+          <ConstructorCard key={item._id} item={item} index={index} />
         )
       );
     });

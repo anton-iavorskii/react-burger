@@ -1,14 +1,11 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useInView } from 'react-intersection-observer';
 import BurgerIngredientsStyles from './burger-ingredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-import {
-  TAB_SWITCH,
-  GET_MODAL_INGREDIENT_CLOSE,
-} from '../../services/actions/ingredients';
+import { GET_MODAL_INGREDIENT_CLOSE } from '../../services/actions/ingredients';
 import { BUN, SAUSECES, FILLING } from '../../utils/consts';
 import IngredientCard from '../ingredient-card/ingredient-card';
 
@@ -18,19 +15,17 @@ const BurgerIngredients = () => {
   const refBun = useRef(null);
   const refSauce = useRef(null);
   const refContainer = useRef(null);
+  const [currentTab, setCurrentTab] = useState(BUN);
 
-  const { items, ingredient, isVisibleModal, currentTab } = useSelector(
-    (store) => {
-      return {
-        items: store.allIngredients.items,
-        itemsRequest: store.allIngredients.itemsRequest,
-        itemsFailed: store.allIngredients.itemsFailed,
-        ingredient: store.allIngredients.ingredient,
-        isVisibleModal: store.modal.isVisibleIngredientModal,
-        currentTab: store.tabs.currentTab,
-      };
-    }
-  );
+  const { items, ingredient, isVisibleModal } = useSelector((store) => {
+    return {
+      items: store.allIngredients.items,
+      itemsRequest: store.allIngredients.itemsRequest,
+      itemsFailed: store.allIngredients.itemsFailed,
+      ingredient: store.allIngredients.ingredient,
+      isVisibleModal: store.modal.isVisibleIngredientModal,
+    };
+  });
 
   const [refBunsContainer, inViewBunsContainer] = useInView({
     root: refContainer.current,
@@ -52,7 +47,7 @@ const BurgerIngredients = () => {
   };
 
   const handleTabs = (tabName) => {
-    dispatch({ type: TAB_SWITCH, tabName });
+    setCurrentTab(tabName);
     if (tabName === BUN) {
       refBun.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
     }
@@ -107,19 +102,19 @@ const BurgerIngredients = () => {
       !inViewFillingsContainer &&
       !inViewBunsContainer
     ) {
-      dispatch({ type: TAB_SWITCH, tabName: SAUSECES });
+      setCurrentTab(SAUSECES);
     } else if (
       inViewFillingsContainer &&
       !inViewSaucesContainer &&
       !inViewBunsContainer
     ) {
-      dispatch({ type: TAB_SWITCH, tabName: FILLING });
+      setCurrentTab(FILLING);
     } else if (
       inViewBunsContainer &&
       !inViewFillingsContainer &&
       !inViewSaucesContainer
     ) {
-      dispatch({ type: TAB_SWITCH, tabName: BUN });
+      setCurrentTab(BUN);
     }
   }, [inViewSaucesContainer, inViewFillingsContainer, inViewBunsContainer]);
 
