@@ -16,7 +16,7 @@ const IngredientCard = ({ item }) => {
 
   const { constructorItems } = useSelector((store) => {
     return {
-      constructorItems: store.allIngredients.constructorItems,
+      constructorItems: store.constructorBurger.constructorItems,
     };
   });
 
@@ -34,7 +34,7 @@ const IngredientCard = ({ item }) => {
 
   const [{ isDrag }, dragRef] = useDrag({
     type: 'ingredient',
-    item: { id: item._id },
+    item: item,
     collect: (monitor) => ({
       isDrag: monitor.isDragging(),
     }),

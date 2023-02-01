@@ -12,8 +12,8 @@ import OrderDetails from '../order-details/order-details';
 import {
   GET_MODAL_ORDER_OPEN,
   GET_MODAL_ORDER_CLOSE,
-  ADD_CONSTRUCTOR_INGREDIENT,
   getOrder,
+  addConstructorItem,
 } from '../../services/actions/ingredients';
 import ConstructorCard from '../constructor-card/constructor-card';
 import { BUN } from '../../utils/consts';
@@ -23,16 +23,16 @@ const BurgerConstructor = () => {
 
   const { constructorItems, isVisibleModal, order } = useSelector((store) => {
     return {
-      constructorItems: store.allIngredients.constructorItems,
+      constructorItems: store.constructorBurger.constructorItems,
       isVisibleModal: store.modal.isVisibleOrderModal,
-      order: store.allIngredients.order,
+      order: store.order.order,
     };
   });
 
   const [, dropTarget] = useDrop({
     accept: 'ingredient',
-    drop(itemId) {
-      dispatch({ type: ADD_CONSTRUCTOR_INGREDIENT, id: itemId.id });
+    drop(item) {
+      dispatch(addConstructorItem(item));
     },
   });
 
@@ -68,7 +68,7 @@ const BurgerConstructor = () => {
     return constructorItems.map((item, index) => {
       return (
         item.type !== BUN && (
-          <ConstructorCard key={item._id} item={item} index={index} />
+          <ConstructorCard key={item.key} item={item} index={index} />
         )
       );
     });

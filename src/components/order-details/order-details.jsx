@@ -7,7 +7,7 @@ import DoneIcon from '../../images/graphics.svg';
 function OrderDetails() {
   const { order } = useSelector((store) => {
     return {
-      order: store.allIngredients.order,
+      order: store.order.order,
     };
   });
 

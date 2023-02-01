@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import getFetch from '../../utils/getFetch';
 
 export const GET_INGREDIENTS_REQUEST = 'GET_INGREDIENTS_REQUEST';
@@ -57,5 +58,12 @@ export function getOrder(body) {
         });
       }
     });
+  };
+}
+
+export function addConstructorItem(item) {
+  return {
+    type: ADD_CONSTRUCTOR_INGREDIENT,
+    item: { ...item, key: uuidv4() },
   };
 }
