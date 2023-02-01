@@ -8,17 +8,13 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-height: 660px;
+  min-width: 560px;
 }
 
 .itemWrapper {
   height: 460px;
   overflow-y: scroll;
-}
-
-.constructorCard {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
 }
 
 .bottomBlockContainer {

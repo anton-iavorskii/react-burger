@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import ModalStyles from './modal.module.css';
 import PropTypes from 'prop-types';
@@ -11,7 +11,7 @@ import {
 
 const modalRoot = document.getElementById('react-modals');
 
-const Modal = ({ children, handleCloseModal, isHeader }) => {
+const Modal = ({ children, isHeader, handleCloseModal }) => {
   const escFunction = useCallback((event) => {
     if (event.key === 'Escape') {
       handleCloseModal();

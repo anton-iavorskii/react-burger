@@ -1,32 +1,30 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import AppStyles from './app.module.css';
 import AppHeader from '../app-header/app-header';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
-import getFetch from '../../utils/getFetch.js';
+import { getIngredients } from '../../services/actions/ingredients';
 
 const App = () => {
-  const [dataIngredients, setDataIngredients] = useState();
-
-  const getDataIngredients = async () => {
-    const data = await getFetch('ingredients');
-    setDataIngredients(data.data);
-  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getDataIngredients();
-  }, []);
+    dispatch(getIngredients());
+  }, [dispatch]);
 
   return (
     <>
       <AppHeader />
-      {dataIngredients && (
-        <main className={AppStyles.container}>
-          <BurgerIngredients dataIngredients={dataIngredients} />
-          <BurgerConstructor dataIngredients={dataIngredients} />
-        </main>
-      )}
+      <main className={AppStyles.container}>
+        <DndProvider backend={HTML5Backend}>
+          <BurgerIngredients />
+          <BurgerConstructor />
+        </DndProvider>
+      </main>
     </>
   );
 };
