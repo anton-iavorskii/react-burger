@@ -1,58 +1,122 @@
-import React, { useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useInView } from 'react-intersection-observer';
 import BurgerIngredientsStyles from './burger-ingredients.module.css';
-import {
-  Tab,
-  CurrencyIcon,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-import { dataIngredientsPropTypes } from '../../utils/common-types';
+import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
+import { GET_MODAL_INGREDIENT_CLOSE } from '../../services/actions/ingredients';
+import { BUN, SAUSECES, FILLING } from '../../utils/consts';
+import IngredientCard from '../ingredient-card/ingredient-card';
 
-const BurgerIngredients = ({ dataIngredients }) => {
-  const bun = 'bun';
-  const sauce = 'sauce';
-  const filling = 'filling';
-  const [current, setCurrent] = useState(bun);
-  const [isVisibleModal, setIsVisibleModal] = useState(false);
-  const [ingredient, setIngredient] = useState();
+const BurgerIngredients = () => {
+  const dispatch = useDispatch();
+  const refFilling = useRef(null);
+  const refBun = useRef(null);
+  const refSauce = useRef(null);
+  const refContainer = useRef(null);
+  const [currentTab, setCurrentTab] = useState(BUN);
 
-  const handleOpenModal = ({ id }) => {
-    getIngredient(id);
-    setIsVisibleModal(true);
-  };
+  const { items, ingredient, isVisibleModal } = useSelector((store) => {
+    return {
+      items: store.allIngredients.items,
+      itemsRequest: store.allIngredients.itemsRequest,
+      itemsFailed: store.allIngredients.itemsFailed,
+      ingredient: store.allIngredients.ingredient,
+      isVisibleModal: store.modal.isVisibleIngredientModal,
+    };
+  });
+
+  const [refBunsContainer, inViewBunsContainer] = useInView({
+    root: refContainer.current,
+    threshold: 1,
+  });
+
+  const [refSaucesContainer, inViewSaucesContainer] = useInView({
+    root: refContainer.current,
+    threshold: 1,
+  });
+
+  const [refFillingsContainer, inViewFillingsContainer] = useInView({
+    root: refContainer.current,
+    threshold: 0.4,
+  });
 
   const handleCloseModal = () => {
-    setIsVisibleModal(false);
+    dispatch({ type: GET_MODAL_INGREDIENT_CLOSE });
   };
 
-  const getIngredient = (id) => {
-    setIngredient(dataIngredients.find((item) => item._id === id));
+  const handleTabs = (tabName) => {
+    setCurrentTab(tabName);
+    if (tabName === BUN) {
+      refBun.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+    if (tabName === SAUSECES) {
+      refSauce.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+    if (tabName === FILLING) {
+      refFilling.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
   };
 
-  const getAllBuns = () => {
-    return dataIngredients.filter((item) => item.type === bun);
-  };
+  const sauces = useMemo(() => {
+    return items.filter((item) => item.type === SAUSECES);
+  }, [items]);
 
-  const getAllSauces = () => {
-    return dataIngredients.filter((item) => item.type === sauce);
-  };
+  const buns = useMemo(() => {
+    return items.filter((item) => item.type === BUN);
+  }, [items]);
 
-  const getAllFilling = () => {
-    return dataIngredients.filter((item) => item.type === filling);
-  };
+  const fillings = useMemo(() => {
+    return items.filter((item) => item.type === FILLING);
+  }, [items]);
 
-  const allBuns = useMemo(() => {
-    return getAllBuns();
-  }, [dataIngredients]);
+  const contentBuns = useMemo(() => {
+    return buns.map((item, index) => {
+      return <IngredientCard key={index} item={item} />;
+    });
+  }, [buns]);
 
-  const allSauces = useMemo(() => {
-    return getAllSauces();
-  }, [dataIngredients]);
+  const contentSauces = useMemo(() => {
+    return sauces.map((item, index) => {
+      return <IngredientCard key={index} item={item} />;
+    });
+  }, [sauces]);
 
-  const allFilling = useMemo(() => {
-    return getAllFilling();
-  }, [dataIngredients]);
+  const contentFillings = useMemo(() => {
+    return fillings.map((item, index) => {
+      return <IngredientCard key={index} item={item} />;
+    });
+  }, [fillings]);
+
+  useEffect(() => {
+    if (
+      inViewBunsContainer &&
+      inViewSaucesContainer &&
+      inViewFillingsContainer
+    ) {
+      return;
+    }
+    if (
+      inViewSaucesContainer &&
+      !inViewFillingsContainer &&
+      !inViewBunsContainer
+    ) {
+      setCurrentTab(SAUSECES);
+    } else if (
+      inViewFillingsContainer &&
+      !inViewSaucesContainer &&
+      !inViewBunsContainer
+    ) {
+      setCurrentTab(FILLING);
+    } else if (
+      inViewBunsContainer &&
+      !inViewFillingsContainer &&
+      !inViewSaucesContainer
+    ) {
+      setCurrentTab(BUN);
+    }
+  }, [inViewSaucesContainer, inViewFillingsContainer, inViewBunsContainer]);
 
   return (
     <>
@@ -61,84 +125,57 @@ const BurgerIngredients = ({ dataIngredients }) => {
           Соберите бургер
         </h1>
         <div className={`mb-10 ${BurgerIngredientsStyles.tabWrapper}`}>
-          <Tab value={bun} active={current === bun} onClick={setCurrent}>
+          <Tab value={BUN} active={currentTab === BUN} onClick={handleTabs}>
             Булки
           </Tab>
-          <Tab value={sauce} active={current === sauce} onClick={setCurrent}>
+          <Tab
+            value={SAUSECES}
+            active={currentTab === SAUSECES}
+            onClick={handleTabs}
+          >
             Соусы
           </Tab>
           <Tab
-            value={filling}
-            active={current === filling}
-            onClick={setCurrent}
+            value={FILLING}
+            active={currentTab === FILLING}
+            onClick={handleTabs}
           >
             Начинки
           </Tab>
         </div>
         <article
           className={`custom-scroll ${BurgerIngredientsStyles.articleContainer}`}
+          ref={refContainer}
         >
-          <h2 className="text text_type_main-medium">Булки</h2>
-          <div
-            className={`pt-6 pr-4 pl-4 ${BurgerIngredientsStyles.productsContainer}`}
-          >
-            {allBuns.map((item) => {
-              return (
-                <div
-                  className={`pb-10 ${BurgerIngredientsStyles.productCard}`}
-                  key={item._id}
-                  onClick={() =>
-                    handleOpenModal({ id: item._id, type: 'ingredients' })
-                  }
-                >
-                  <img className="mr-4 ml-4" src={item.image} alt="булка" />
-                  <div
-                    className={`mt-1 mb-1 ${BurgerIngredientsStyles.priceContainer}`}
-                  >
-                    <span className="text text_type_digits-default mr-2">
-                      {item.price}
-                    </span>
-                    <CurrencyIcon type="primary" />
-                  </div>
-                  <span
-                    className={`text text_type_main-default ${BurgerIngredientsStyles.productName}`}
-                  >
-                    {item.name}
-                  </span>
-                </div>
-              );
-            })}
+          <div ref={refBunsContainer}>
+            <h2 className="text text_type_main-medium" ref={refBun}>
+              Булки
+            </h2>
+            <div
+              className={`pt-6 pr-4 pl-4 ${BurgerIngredientsStyles.productsContainer}`}
+            >
+              {contentBuns}
+            </div>
           </div>
-          <h2 className="text text_type_main-medium">Соусы</h2>
-          <div
-            className={`pt-6 pr-4 pl-4 ${BurgerIngredientsStyles.productsContainer}`}
-          >
-            {allSauces.map((item) => {
-              return (
-                <div
-                  className={` pb-8 ${BurgerIngredientsStyles.productCard}`}
-                  key={item._id}
-                  onClick={() =>
-                    handleOpenModal({ id: item._id, type: 'ingredients' })
-                  }
-                >
-                  <img className="mr-4 ml-4" src={item.image} alt="соус" />
-                  <div
-                    className={`mt-1 mb-1 ${BurgerIngredientsStyles.priceContainer}`}
-                  >
-                    <span className="text text_type_digits-default mr-2">
-                      {item.price}
-                    </span>
-                    <CurrencyIcon type="primary" />
-                  </div>
-                  <span
-                    className={`text text_type_main-default ${BurgerIngredientsStyles.productName}`}
-                  >
-                    {item.name}
-                  </span>
-                </div>
-              );
-            })}
+          <div ref={refSaucesContainer}>
+            <h2 className="text text_type_main-medium" ref={refSauce}>
+              Соусы
+            </h2>
+            <div
+              className={`pt-6 pr-4 pl-4 ${BurgerIngredientsStyles.productsContainer}`}
+            >
+              {contentSauces}
+            </div>
+          </div>
+          <div ref={refFillingsContainer}>
+            <h2 className="text text_type_main-medium" ref={refFilling}>
+              Начинки
+            </h2>
+            <div
+              className={`pt-6 pr-4 pl-4 ${BurgerIngredientsStyles.productsContainer}`}
+            >
+              {contentFillings}
+            </div>
           </div>
         </article>
       </section>
@@ -149,11 +186,6 @@ const BurgerIngredients = ({ dataIngredients }) => {
       )}
     </>
   );
-};
-
-BurgerIngredients.propTypes = {
-  dataIngredients: PropTypes.arrayOf(dataIngredientsPropTypes.isRequired)
-    .isRequired,
 };
 
 export default BurgerIngredients;

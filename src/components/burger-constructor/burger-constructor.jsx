@@ -1,98 +1,118 @@
-import React, { useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useDrop } from 'react-dnd';
 import BurgerConstructorStyles from './burger-constructor.module.css';
 import {
-  DragIcon,
-  ConstructorElement,
   CurrencyIcon,
   Button,
+  ConstructorElement,
 } from '@ya.praktikum/react-developer-burger-ui-components';
-import { dataIngredientsPropTypes } from '../../utils/common-types';
 import Modal from '../modal/modal';
 import OrderDetails from '../order-details/order-details';
+import {
+  GET_MODAL_ORDER_OPEN,
+  GET_MODAL_ORDER_CLOSE,
+  getOrder,
+  addConstructorItem,
+} from '../../services/actions/ingredients';
+import ConstructorCard from '../constructor-card/constructor-card';
+import { BUN } from '../../utils/consts';
 
-const BurgerConstructor = ({ dataIngredients }) => {
-  const [isVisibleModal, setIsVisibleModal] = useState(false);
+const BurgerConstructor = () => {
+  const dispatch = useDispatch();
+
+  const { constructorItems, isVisibleModal, order } = useSelector((store) => {
+    return {
+      constructorItems: store.constructorBurger.constructorItems,
+      isVisibleModal: store.modal.isVisibleOrderModal,
+      order: store.order.order,
+    };
+  });
+
+  const [, dropTarget] = useDrop({
+    accept: 'ingredient',
+    drop(item) {
+      dispatch(addConstructorItem(item));
+    },
+  });
 
   const handleOpenModal = () => {
-    setIsVisibleModal(true);
+    const itemsId = constructorItems.map((item) => item._id);
+    dispatch(
+      getOrder({ ingredients: bun ? [...itemsId, bun._id] : [itemsId] })
+    );
+    dispatch({ type: GET_MODAL_ORDER_OPEN });
   };
 
   const handleCloseModal = () => {
-    setIsVisibleModal(false);
-  };
-
-  const getBun = () => {
-    return dataIngredients.find((item) => item.type === 'bun');
-  };
-
-  const getIngridients = () => {
-    return dataIngredients.filter((item) => item.type !== 'bun');
+    dispatch({ type: GET_MODAL_ORDER_CLOSE });
   };
 
   const getTotalSum = () => {
-    let result = 0;
-    dataIngredients.forEach((item) => {
-      result += item.price;
-    });
-    return result;
+    return constructorItems.reduce(
+      (accum, item) =>
+        item.type === BUN ? accum + item.price * 2 : accum + item.price,
+      0
+    );
   };
-
-  const bun = useMemo(() => {
-    return getBun();
-  }, [dataIngredients]);
-
-  const ingridients = useMemo(() => {
-    return getIngridients();
-  }, [dataIngredients]);
 
   const totalSum = useMemo(() => {
     return getTotalSum();
-  }, [dataIngredients]);
+  }, [constructorItems]);
+
+  const bun = useMemo(() => {
+    return constructorItems.find((item) => item.type === 'bun');
+  }, [constructorItems]);
+
+  const constructorContent = useMemo(() => {
+    return constructorItems.map((item, index) => {
+      return (
+        item.type !== BUN && (
+          <ConstructorCard key={item.key} item={item} index={index} />
+        )
+      );
+    });
+  }, [constructorItems]);
 
   return (
     <>
       <section
         className={`pt-25 pr-4 pl-4 ml-10 ${BurgerConstructorStyles.wrapper}`}
       >
-        <div className={BurgerConstructorStyles.constructorItemContainer}>
-          <div className={`pl-8 ${BurgerConstructorStyles.constructorCard}`}>
-            <ConstructorElement
-              type="top"
-              isLocked={true}
-              text={bun.name + ' верх'}
-              price={bun.price}
-              thumbnail={bun.image}
-            />
-          </div>
+        <div
+          className={BurgerConstructorStyles.constructorItemContainer}
+          ref={dropTarget}
+        >
           <div
             className={`custom-scroll ${BurgerConstructorStyles.itemWrapper}`}
           >
-            {ingridients.map((item) => {
-              return (
-                <div
-                  className={`${BurgerConstructorStyles.constructorCard}`}
-                  key={item._id}
-                >
-                  <DragIcon type="primary" />
-                  <ConstructorElement
-                    extraClass="mr-2 ml-2"
-                    text={item.name}
-                    price={item.price}
-                    thumbnail={item.image}
-                  />
-                </div>
-              );
-            })}
-          </div>
-          <div className={`pl-8 ${BurgerConstructorStyles.constructorCard}`}>
-            <ConstructorElement
-              type="bottom"
-              isLocked={true}
-              text={bun.name + ' низ'}
-              price={bun.price}
-              thumbnail={bun.image}
-            />
+            {bun && (
+              <div
+                className={`pl-8 ${BurgerConstructorStyles.constructorCard}`}
+              >
+                <ConstructorElement
+                  type="top"
+                  isLocked={true}
+                  text={bun.name + ' верх'}
+                  price={bun.price}
+                  thumbnail={bun.image}
+                />
+              </div>
+            )}
+            {constructorContent}
+            {bun && (
+              <div
+                className={`pl-8 ${BurgerConstructorStyles.constructorCard}`}
+              >
+                <ConstructorElement
+                  type="bottom"
+                  isLocked={true}
+                  text={bun.name + ' низ'}
+                  price={bun.price}
+                  thumbnail={bun.image}
+                />
+              </div>
+            )}
           </div>
         </div>
         <div
@@ -114,18 +134,13 @@ const BurgerConstructor = ({ dataIngredients }) => {
           </Button>
         </div>
       </section>
-      {isVisibleModal && (
+      {isVisibleModal && order && (
         <Modal handleCloseModal={handleCloseModal}>
           <OrderDetails />
         </Modal>
       )}
     </>
   );
-};
-
-BurgerConstructor.propTypes = {
-  dataIngredients: PropTypes.arrayOf(dataIngredientsPropTypes.isRequired)
-    .isRequired,
 };
 
 export default BurgerConstructor;
