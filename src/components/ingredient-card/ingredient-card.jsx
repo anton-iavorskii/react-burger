@@ -1,19 +1,13 @@
 import React, { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useDrag } from 'react-dnd';
 
 import IngredientCardStyles from './ingredient-card.module.css';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import {
-  GET_INGREDIENT,
-  GET_MODAL_INGREDIENT_OPEN,
-} from '../../services/actions/ingredients';
 import { dataIngredientsPropTypes } from '../../utils/common-types';
 import { BUN } from '../../utils/consts';
 
 const IngredientCard = ({ item }) => {
-  const dispatch = useDispatch();
-
   const { constructorItems } = useSelector((store) => {
     return {
       constructorItems: store.constructorBurger.constructorItems,
@@ -26,11 +20,6 @@ const IngredientCard = ({ item }) => {
     );
     return itemsInBurger.length;
   }, [constructorItems]);
-
-  const handleOpenModal = ({ id }) => {
-    dispatch({ type: GET_INGREDIENT, id });
-    dispatch({ type: GET_MODAL_INGREDIENT_OPEN });
-  };
 
   const [{ isDrag }, dragRef] = useDrag({
     type: 'ingredient',
@@ -46,7 +35,6 @@ const IngredientCard = ({ item }) => {
         className={`pb-10 ${IngredientCardStyles.productCard}`}
         ref={dragRef}
         key={item._id}
-        onClick={() => handleOpenModal({ id: item._id, type: 'ingredients' })}
       >
         {count !== 0 && (
           <span

@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { useDrop } from 'react-dnd';
 import BurgerConstructorStyles from './burger-constructor.module.css';
 import {
@@ -20,14 +21,17 @@ import { BUN } from '../../utils/consts';
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
-
-  const { constructorItems, isVisibleModal, order } = useSelector((store) => {
-    return {
-      constructorItems: store.constructorBurger.constructorItems,
-      isVisibleModal: store.modal.isVisibleOrderModal,
-      order: store.order.order,
-    };
-  });
+  const navigate = useNavigate();
+  const { constructorItems, isVisibleModal, order, user } = useSelector(
+    (store) => {
+      return {
+        constructorItems: store.constructorBurger.constructorItems,
+        isVisibleModal: store.modal.isVisibleOrderModal,
+        order: store.order.order,
+        user: store.user.user,
+      };
+    }
+  );
 
   const [, dropTarget] = useDrop({
     accept: 'ingredient',
@@ -37,11 +41,15 @@ const BurgerConstructor = () => {
   });
 
   const handleOpenModal = () => {
-    const itemsId = constructorItems.map((item) => item._id);
-    dispatch(
-      getOrder({ ingredients: bun ? [...itemsId, bun._id] : [itemsId] })
-    );
-    dispatch({ type: GET_MODAL_ORDER_OPEN });
+    if (!user) {
+      navigate('/login');
+    } else {
+      const itemsId = constructorItems.map((item) => item._id);
+      dispatch(
+        getOrder({ ingredients: bun ? [...itemsId, bun._id] : [itemsId] })
+      );
+      dispatch({ type: GET_MODAL_ORDER_OPEN });
+    }
   };
 
   const handleCloseModal = () => {
@@ -129,6 +137,7 @@ const BurgerConstructor = () => {
             type="primary"
             size="medium"
             onClick={handleOpenModal}
+            disabled={totalSum > 0 ? false : true}
           >
             Оформить заказ
           </Button>

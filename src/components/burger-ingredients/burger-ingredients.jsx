@@ -1,15 +1,16 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useInView } from 'react-intersection-observer';
 import BurgerIngredientsStyles from './burger-ingredients.module.css';
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
-import { GET_MODAL_INGREDIENT_CLOSE } from '../../services/actions/ingredients';
 import { BUN, SAUSECES, FILLING } from '../../utils/consts';
 import IngredientCard from '../ingredient-card/ingredient-card';
 
 const BurgerIngredients = () => {
+  const location = useLocation();
   const dispatch = useDispatch();
   const refFilling = useRef(null);
   const refBun = useRef(null);
@@ -17,13 +18,11 @@ const BurgerIngredients = () => {
   const refContainer = useRef(null);
   const [currentTab, setCurrentTab] = useState(BUN);
 
-  const { items, ingredient, isVisibleModal } = useSelector((store) => {
+  const { items } = useSelector((store) => {
     return {
       items: store.allIngredients.items,
       itemsRequest: store.allIngredients.itemsRequest,
       itemsFailed: store.allIngredients.itemsFailed,
-      ingredient: store.allIngredients.ingredient,
-      isVisibleModal: store.modal.isVisibleIngredientModal,
     };
   });
 
@@ -41,10 +40,6 @@ const BurgerIngredients = () => {
     root: refContainer.current,
     threshold: 0.4,
   });
-
-  const handleCloseModal = () => {
-    dispatch({ type: GET_MODAL_INGREDIENT_CLOSE });
-  };
 
   const handleTabs = (tabName) => {
     setCurrentTab(tabName);
@@ -73,19 +68,43 @@ const BurgerIngredients = () => {
 
   const contentBuns = useMemo(() => {
     return buns.map((item, index) => {
-      return <IngredientCard key={index} item={item} />;
+      return (
+        <Link
+          to={`/ingredients/${item._id}`}
+          state={{ background: location }}
+          key={item._id}
+        >
+          <IngredientCard key={index} item={item} />
+        </Link>
+      );
     });
   }, [buns]);
 
   const contentSauces = useMemo(() => {
     return sauces.map((item, index) => {
-      return <IngredientCard key={index} item={item} />;
+      return (
+        <Link
+          to={`/ingredients/${item._id}`}
+          state={{ background: location }}
+          key={item._id}
+        >
+          <IngredientCard key={index} item={item} />{' '}
+        </Link>
+      );
     });
   }, [sauces]);
 
   const contentFillings = useMemo(() => {
     return fillings.map((item, index) => {
-      return <IngredientCard key={index} item={item} />;
+      return (
+        <Link
+          to={`/ingredients/${item._id}`}
+          state={{ background: location }}
+          key={item._id}
+        >
+          <IngredientCard key={index} item={item} />{' '}
+        </Link>
+      );
     });
   }, [fillings]);
 
@@ -179,11 +198,6 @@ const BurgerIngredients = () => {
           </div>
         </article>
       </section>
-      {isVisibleModal && (
-        <Modal handleCloseModal={handleCloseModal} isHeader>
-          <IngredientDetails ingredient={ingredient} />
-        </Modal>
-      )}
     </>
   );
 };
