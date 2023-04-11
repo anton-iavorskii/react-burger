@@ -146,6 +146,7 @@ export const updateUser = (body) => {
     fetchWithRefresh(requestUrl, {
       method: 'PATCH',
       headers: {
+        'Content-Type': 'application/json',
         authorization: localStorage.getItem('accessToken'),
       },
       body,

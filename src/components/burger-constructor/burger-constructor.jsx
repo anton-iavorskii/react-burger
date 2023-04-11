@@ -17,21 +17,21 @@ import {
   addConstructorItem,
 } from '../../services/actions/ingredients';
 import ConstructorCard from '../constructor-card/constructor-card';
-import { BUN } from '../../utils/consts';
+import { BUN, loginPath, mainPath } from '../../utils/consts';
 
 const BurgerConstructor = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { constructorItems, isVisibleModal, order, user } = useSelector(
-    (store) => {
-      return {
-        constructorItems: store.constructorBurger.constructorItems,
-        isVisibleModal: store.modal.isVisibleOrderModal,
-        order: store.order.order,
-        user: store.user.user,
-      };
-    }
-  );
+
+  const getDataStore = (store) => {
+    return {
+      constructorItems: store.constructorBurger.constructorItems,
+      isVisibleModal: store.modal.isVisibleOrderModal,
+      order: store.order.order,
+      user: store.user.user,
+    };
+  } 
+  const { constructorItems, isVisibleModal, order, user } = useSelector(getDataStore);
 
   const [, dropTarget] = useDrop({
     accept: 'ingredient',
@@ -42,7 +42,7 @@ const BurgerConstructor = () => {
 
   const handleOpenModal = () => {
     if (!user) {
-      navigate('/login');
+      navigate(loginPath);
     } else {
       const itemsId = constructorItems.map((item) => item._id);
       dispatch(

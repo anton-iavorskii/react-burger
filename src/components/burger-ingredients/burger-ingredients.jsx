@@ -18,13 +18,12 @@ const BurgerIngredients = () => {
   const refContainer = useRef(null);
   const [currentTab, setCurrentTab] = useState(BUN);
 
-  const { items } = useSelector((store) => {
+  const getDataStore = (store) => {
     return {
       items: store.allIngredients.items,
-      itemsRequest: store.allIngredients.itemsRequest,
-      itemsFailed: store.allIngredients.itemsFailed,
     };
-  });
+  }
+  const { items } = useSelector(getDataStore);
 
   const [refBunsContainer, inViewBunsContainer] = useInView({
     root: refContainer.current,

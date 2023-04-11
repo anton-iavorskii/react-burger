@@ -7,17 +7,18 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import ResetPasswordStyles from './reset-password.module.css';
-import { colorLink } from '../../utils/consts';
+import { colorLink, loginPath } from '../../utils/consts';
 import { resetPassword } from '../../services/actions/user';
 import useForm from '../../hooks/useForm';
 
 const ResetPassword = () => {
   const dispatch = useDispatch();
-  const { isPasswordForgot } = useSelector((store) => {
+  const getDataStore = (store) => {
     return {
       isPasswordForgot: store.user.isPasswordForgot,
     };
-  });
+  }
+  const { isPasswordForgot } = useSelector(getDataStore);
 
   const { values, handleChange } = useForm({
     password: '',
@@ -72,7 +73,7 @@ const ResetPassword = () => {
         </form>
         <span className="text text_type_main-default mt-20 mb-4">
           Вспомнили пароль?{' '}
-          <Link to="/login" style={{ color: colorLink }}>
+          <Link to={loginPath} style={{ color: colorLink }}>
             Войти
           </Link>
         </span>

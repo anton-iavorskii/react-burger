@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, NavLink, Outlet, useMatch } from 'react-router-dom';
+import { Link, Outlet, useMatch } from 'react-router-dom';
 import {
   Button,
   Input,
@@ -8,18 +8,18 @@ import {
 import ProfileStyles from './profile.module.css';
 import { logout, updateUser } from '../../services/actions/user';
 import useForm from '../../hooks/useForm';
-import { colorLink } from '../../utils/consts';
+import { colorLink, mainPath, profileOrdersPath, profilePath } from '../../utils/consts';
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const matchProfile = useMatch('/profile');
-  const matchOrders = useMatch('/profile/orders');
-
-  const { user } = useSelector((store) => {
+  const matchProfile = useMatch(profilePath);
+  const matchOrders = useMatch(profilePath + '/' + profileOrdersPath);
+  const getDataStore = (store) => {
     return {
       user: store.user.user,
     };
-  });
+  }
+  const { user } = useSelector(getDataStore);
   const [isNewData, setIsNewData] = useState(false);
 
   const { values, handleChange, setValues } = useForm({
@@ -66,7 +66,7 @@ const Profile = () => {
             !matchProfile && 'text_color_inactive'
           }`}
         >
-          <Link to="/profile">Профиль</Link>
+          <Link to={profilePath}>Профиль</Link>
         </span>
 
         <span
@@ -74,10 +74,10 @@ const Profile = () => {
             !matchOrders && 'text_color_inactive'
           }`}
         >
-          <Link to="orders">История заказов</Link>
+          <Link to={profileOrdersPath}>История заказов</Link>
         </span>
         <span className="text text_type_main-medium pt-4 pb-4 text_color_inactive">
-          <Link to="/" onClick={handleLogout}>
+          <Link to={mainPath} onClick={handleLogout}>
             Выход
           </Link>
         </span>

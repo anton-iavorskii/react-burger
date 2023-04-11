@@ -6,7 +6,7 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import RegisterStyles from './register.module.css';
-import { colorLink } from '../../utils/consts';
+import { colorLink, loginPath } from '../../utils/consts';
 import { useDispatch } from 'react-redux';
 import { register } from '../../services/actions/user';
 import useForm from '../../hooks/useForm';
@@ -69,7 +69,7 @@ const RegisterPage = () => {
       </form>
       <span className="text text_type_main-default mt-20 mb-4">
         Уже зарегистрированы?{' '}
-        <Link to="/login" style={{ color: colorLink }}>
+        <Link to={loginPath} style={{ color: colorLink }}>
           Войти
         </Link>
       </span>

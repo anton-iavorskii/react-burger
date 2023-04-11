@@ -5,11 +5,12 @@ import OrderDetailsStyles from './order-details.module.css';
 import DoneIcon from '../../images/graphics.svg';
 
 function OrderDetails() {
-  const { order } = useSelector((store) => {
+  const getDataStore = (store) => {
     return {
       order: store.order.order,
     };
-  });
+  }
+  const { order } = useSelector(getDataStore);
 
   return (
     <div className={OrderDetailsStyles.wrapper}>

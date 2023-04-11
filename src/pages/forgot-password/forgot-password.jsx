@@ -7,17 +7,18 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import ForgotPasswordStyles from './forgot-password.module.css';
-import { colorLink } from '../../utils/consts';
+import { colorLink, loginPath } from '../../utils/consts';
 import useForm from '../../hooks/useForm';
 import { forgotPassword } from '../../services/actions/user';
 
 const ForgotPassword = () => {
   const dispatch = useDispatch();
-  const { isPasswordForgot } = useSelector((store) => {
+  const getDataStore = (store) => {
     return {
       isPasswordForgot: store.user.isPasswordForgot,
     };
-  });
+  }
+  const { isPasswordForgot } = useSelector(getDataStore);
 
   const { values, handleChange } = useForm({
     email: '',
@@ -33,7 +34,7 @@ const ForgotPassword = () => {
   };
 
   if (isPasswordForgot) {
-    return <Navigate to="/resetPassword" replace />;
+    return <Navigate to="/reset-password" replace />;
   } else {
     return (
       <div className={ForgotPasswordStyles.container}>
@@ -60,7 +61,7 @@ const ForgotPassword = () => {
         </form>
         <span className="text text_type_main-default mt-20 mb-4">
           Вспомнили пароль?{' '}
-          <Link to="/login" style={{ color: colorLink }}>
+          <Link to={loginPath} style={{ color: colorLink }}>
             Войти
           </Link>
         </span>

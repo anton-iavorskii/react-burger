@@ -14,6 +14,9 @@ import { OnlyAuth, OnlyUnAuth } from '../protected-route/protected-route';
 import Modal from '../modal/modal';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import ProfileOrdersPage from '../../pages/profile-orders/profile-orders';
+import { mainPath, loginPath, registerPath, forgotPasswordPath, resetPasswordPath, profilePath,
+  profileOrdersPath, ingredientsIdPath } from '../../utils/consts';
+
 
 const App = () => {
   const dispatch = useDispatch();
@@ -22,7 +25,7 @@ const App = () => {
   const background = location.state && location.state.background;
 
   const handleCloseModal = () => {
-    navigate('/');
+    navigate(mainPath);
   };
 
   useEffect(() => {
@@ -34,30 +37,30 @@ const App = () => {
     <>
       <AppHeader />
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path={mainPath} element={<MainPage />} />
         <Route
-          path="/ingredients/:ingredientId"
+          path={ingredientsIdPath}
           element={<IngredientDetails />}
         />
         <Route
-          path="/login"
+          path={loginPath}
           element={<OnlyUnAuth component={<LoginPage />} />}
         />
         <Route
-          path="/register"
+          path={registerPath}
           element={<OnlyUnAuth component={<RegisterPage />} />}
         />
         <Route
-          path="/forgotPassword"
+          path={forgotPasswordPath}
           element={<OnlyUnAuth component={<ForgotPassword />} />}
         />
         <Route
-          path="/resetPassword"
+          path={resetPasswordPath}
           element={<OnlyUnAuth component={<ResetPassword />} />}
         />
-        <Route path="/profile" element={<OnlyAuth component={<Profile />} />}>
+        <Route path={profilePath} element={<OnlyAuth component={<Profile />} />}>
           <Route
-            path="orders"
+            path={profileOrdersPath}
             element={<OnlyAuth component={<ProfileOrdersPage />} />}
           />
         </Route>
@@ -65,7 +68,7 @@ const App = () => {
       {background && (
         <Routes>
           <Route
-            path="/ingredients/:ingredientId"
+            path={ingredientsIdPath}
             element={
               <Modal handleCloseModal={handleCloseModal} isHeader>
                 <IngredientDetails />

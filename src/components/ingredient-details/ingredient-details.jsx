@@ -5,13 +5,16 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 function IngredientDetails() {
-  const { ingredientId } = useParams();
-  const { allIngredients } = useSelector((store) => {
+  const { id } = useParams();
+
+  const getDataStore = (store) => {
     return {
       allIngredients: store.allIngredients.items,
     };
-  });
-  const ingredient = allIngredients.find((item) => item._id === ingredientId);
+  }
+  const { allIngredients } = useSelector(getDataStore);
+  
+  const ingredient = allIngredients.find((item) => item._id === id);
 
   if (!ingredient) {
     return null;

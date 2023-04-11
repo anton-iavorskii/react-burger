@@ -2,9 +2,14 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const ProtectedRoute = ({ onlyUnAuth = false, component }) => {
-  const isAuthChecked = useSelector((store) => store.user.isAuthChecked);
-  const user = useSelector((store) => store.user.user);
   const location = useLocation();
+  const getDataStore = (store) => {
+    return {
+      user: store.user.user,
+      isAuthChecked: store.user.isAuthChecked
+    };
+  } 
+  const { isAuthChecked, user } = useSelector(getDataStore);
 
   if (!isAuthChecked) {
     // Запрос еще выполняется

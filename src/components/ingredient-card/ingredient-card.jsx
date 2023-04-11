@@ -8,11 +8,12 @@ import { dataIngredientsPropTypes } from '../../utils/common-types';
 import { BUN } from '../../utils/consts';
 
 const IngredientCard = ({ item }) => {
-  const { constructorItems } = useSelector((store) => {
+  const getDataStore = (store) => {
     return {
       constructorItems: store.constructorBurger.constructorItems,
     };
-  });
+  }
+  const { constructorItems } = useSelector(getDataStore);
 
   const count = useMemo(() => {
     const itemsInBurger = constructorItems.filter(

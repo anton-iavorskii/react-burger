@@ -7,8 +7,8 @@ import {
 } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import LoginStyles from './login.module.css';
-import { colorLink } from '../../utils/consts';
-import { login } from '../../services/actions/user';
+import { colorLink, forgotPasswordPath, registerPath } from '../../utils/consts';
+import { login} from '../../services/actions/user';
 import useForm from '../../hooks/useForm';
 
 const LoginPage = () => {
@@ -58,13 +58,13 @@ const LoginPage = () => {
       </form>
       <span className="text text_type_main-default mt-20 mb-4">
         Вы — новый пользователь?{' '}
-        <Link to="/register" style={{ color: colorLink }}>
+        <Link to={registerPath} style={{ color: colorLink }}>
           Зарегистрироваться
         </Link>
       </span>
       <span className="text text_type_main-default">
         Забыли пароль?{' '}
-        <Link to="/forgotPassword" style={{ color: colorLink }}>
+        <Link to={forgotPasswordPath} style={{ color: colorLink }}>
           Восстановить пароль
         </Link>
       </span>

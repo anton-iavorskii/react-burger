@@ -17,6 +17,7 @@ export const refreshToken = () => {
 };
 
 export const fetchWithRefresh = async (url, options) => {
+  options['Content-Type'] = 'application/json';
   try {
     const res = await fetch(url, options);
     return await checkResponse(res);
