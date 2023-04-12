@@ -1,18 +1,25 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import IngredientDetailsStyles from './ingredient-details.module.css';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
-const ingredientPropTypes = PropTypes.shape({
-  _id: PropTypes.string.isRequired,
-  image_large: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  calories: PropTypes.number.isRequired,
-  proteins: PropTypes.number.isRequired,
-  fat: PropTypes.number.isRequired,
-  carbohydrates: PropTypes.number.isRequired,
-});
+function IngredientDetails() {
+  const { id } = useParams();
 
-function IngredientDetails({ ingredient }) {
+  const getDataStore = (store) => {
+    return {
+      allIngredients: store.allIngredients.items,
+    };
+  }
+  const { allIngredients } = useSelector(getDataStore);
+  
+  const ingredient = allIngredients.find((item) => item._id === id);
+
+  if (!ingredient) {
+    return null;
+  }
+
   return (
     <div className={IngredientDetailsStyles.wrapper}>
       <img src={ingredient.image_large} alt="булка" />
@@ -64,9 +71,5 @@ function IngredientDetails({ ingredient }) {
     </div>
   );
 }
-
-IngredientDetails.propTypes = {
-  ingredient: ingredientPropTypes.isRequired,
-};
 
 export default IngredientDetails;

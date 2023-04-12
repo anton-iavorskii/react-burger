@@ -5,7 +5,7 @@
 .tabWrapper,
 .productsContainer {
   display: flex;
-  width: 600px;
+  width: 630px;
   flex-wrap: wrap;
 }
 
