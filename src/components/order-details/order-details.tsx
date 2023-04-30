@@ -1,15 +1,14 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
+import OrderDetailsStyles from "./order-details.module.css";
+import DoneIcon from "../../images/graphics.svg";
 
-import OrderDetailsStyles from './order-details.module.css';
-import DoneIcon from '../../images/graphics.svg';
-
-function OrderDetails() {
+const OrderDetails = (): JSX.Element => {
+  // @ts-ignore  - todo: 5 sprint
   const getDataStore = (store) => {
     return {
       order: store.order.order,
     };
-  }
+  };
   const { order } = useSelector(getDataStore);
 
   return (
@@ -29,6 +28,6 @@ function OrderDetails() {
       </span>
     </div>
   );
-}
+};
 
 export default OrderDetails;

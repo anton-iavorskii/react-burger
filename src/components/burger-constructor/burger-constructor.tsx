@@ -1,28 +1,29 @@
-import React, { useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { useDrop } from 'react-dnd';
-import BurgerConstructorStyles from './burger-constructor.module.css';
+import React, { useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDrop } from "react-dnd";
+import BurgerConstructorStyles from "./burger-constructor.module.css";
 import {
   CurrencyIcon,
   Button,
   ConstructorElement,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-import Modal from '../modal/modal';
-import OrderDetails from '../order-details/order-details';
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import Modal from "../modal/modal";
+import OrderDetails from "../order-details/order-details";
 import {
   GET_MODAL_ORDER_OPEN,
   GET_MODAL_ORDER_CLOSE,
   getOrder,
   addConstructorItem,
-} from '../../services/actions/ingredients';
-import ConstructorCard from '../constructor-card/constructor-card';
-import { BUN, loginPath, mainPath } from '../../utils/consts';
+} from "../../services/actions/ingredients";
+import ConstructorCard from "../constructor-card/constructor-card";
+import { BUN, loginPath, mainPath } from "../../utils/consts";
+import { TConstructorIngredient } from "../../utils/types";
 
-const BurgerConstructor = () => {
+const BurgerConstructor = (): JSX.Element => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  // @ts-ignore  - todo: 5 sprint
   const getDataStore = (store) => {
     return {
       constructorItems: store.constructorBurger.constructorItems,
@@ -30,12 +31,13 @@ const BurgerConstructor = () => {
       order: store.order.order,
       user: store.user.user,
     };
-  } 
-  const { constructorItems, isVisibleModal, order, user } = useSelector(getDataStore);
+  };
+  const { constructorItems, isVisibleModal, order, user } =
+    useSelector(getDataStore);
 
   const [, dropTarget] = useDrop({
-    accept: 'ingredient',
-    drop(item) {
+    accept: "ingredient",
+    drop(item: TConstructorIngredient) {
       dispatch(addConstructorItem(item));
     },
   });
@@ -44,8 +46,11 @@ const BurgerConstructor = () => {
     if (!user) {
       navigate(loginPath);
     } else {
-      const itemsId = constructorItems.map((item) => item._id);
+      const itemsId = constructorItems.map(
+        (item: TConstructorIngredient) => item._id
+      );
       dispatch(
+        // @ts-ignore  - todo: 5 sprint
         getOrder({ ingredients: bun ? [...itemsId, bun._id] : [itemsId] })
       );
       dispatch({ type: GET_MODAL_ORDER_OPEN });
@@ -56,9 +61,9 @@ const BurgerConstructor = () => {
     dispatch({ type: GET_MODAL_ORDER_CLOSE });
   };
 
-  const getTotalSum = () => {
+  const getTotalSum = (): number => {
     return constructorItems.reduce(
-      (accum, item) =>
+      (accum: number, item: TConstructorIngredient) =>
         item.type === BUN ? accum + item.price * 2 : accum + item.price,
       0
     );
@@ -69,17 +74,21 @@ const BurgerConstructor = () => {
   }, [constructorItems]);
 
   const bun = useMemo(() => {
-    return constructorItems.find((item) => item.type === 'bun');
+    return constructorItems.find(
+      (item: TConstructorIngredient) => item.type === "bun"
+    );
   }, [constructorItems]);
 
   const constructorContent = useMemo(() => {
-    return constructorItems.map((item, index) => {
-      return (
-        item.type !== BUN && (
-          <ConstructorCard key={item.key} item={item} index={index} />
-        )
-      );
-    });
+    return constructorItems.map(
+      (item: TConstructorIngredient, index: number) => {
+        return (
+          item.type !== BUN && (
+            <ConstructorCard key={item.key} item={item} index={index} />
+          )
+        );
+      }
+    );
   }, [constructorItems]);
 
   return (
@@ -101,7 +110,7 @@ const BurgerConstructor = () => {
                 <ConstructorElement
                   type="top"
                   isLocked={true}
-                  text={bun.name + ' верх'}
+                  text={bun.name + " верх"}
                   price={bun.price}
                   thumbnail={bun.image}
                 />
@@ -115,7 +124,7 @@ const BurgerConstructor = () => {
                 <ConstructorElement
                   type="bottom"
                   isLocked={true}
-                  text={bun.name + ' низ'}
+                  text={bun.name + " низ"}
                   price={bun.price}
                   thumbnail={bun.image}
                 />

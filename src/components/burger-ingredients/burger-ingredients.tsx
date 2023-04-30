@@ -1,28 +1,29 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useInView } from 'react-intersection-observer';
-import BurgerIngredientsStyles from './burger-ingredients.module.css';
-import { Tab } from '@ya.praktikum/react-developer-burger-ui-components';
-import Modal from '../modal/modal';
-import IngredientDetails from '../ingredient-details/ingredient-details';
-import { BUN, SAUSECES, FILLING } from '../../utils/consts';
-import IngredientCard from '../ingredient-card/ingredient-card';
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useInView } from "react-intersection-observer";
+import BurgerIngredientsStyles from "./burger-ingredients.module.css";
+import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import Modal from "../modal/modal";
+import IngredientDetails from "../ingredient-details/ingredient-details";
+import { BUN, SAUSECES, FILLING } from "../../utils/consts";
+import IngredientCard from "../ingredient-card/ingredient-card";
+import { TIngredient } from "../../utils/types";
 
 const BurgerIngredients = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-  const refFilling = useRef(null);
-  const refBun = useRef(null);
-  const refSauce = useRef(null);
-  const refContainer = useRef(null);
+  const refFilling = useRef<HTMLHeadingElement>(null);
+  const refBun = useRef<HTMLHeadingElement>(null);
+  const refSauce = useRef<HTMLHeadingElement>(null);
+  const refContainer = useRef<HTMLDivElement>(null);
   const [currentTab, setCurrentTab] = useState(BUN);
-
+  // @ts-ignore  - todo: 5 sprint
   const getDataStore = (store) => {
     return {
       items: store.allIngredients.items,
     };
-  }
+  };
   const { items } = useSelector(getDataStore);
 
   const [refBunsContainer, inViewBunsContainer] = useInView({
@@ -40,33 +41,39 @@ const BurgerIngredients = () => {
     threshold: 0.4,
   });
 
-  const handleTabs = (tabName) => {
+  const handleTabs = (tabName: string) => {
     setCurrentTab(tabName);
     if (tabName === BUN) {
-      refBun.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      refBun.current &&
+        refBun.current.scrollIntoView({ block: "start", behavior: "smooth" });
     }
     if (tabName === SAUSECES) {
-      refSauce.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      refSauce.current &&
+        refSauce.current.scrollIntoView({ block: "start", behavior: "smooth" });
     }
     if (tabName === FILLING) {
-      refFilling.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      refFilling.current &&
+        refFilling.current.scrollIntoView({
+          block: "start",
+          behavior: "smooth",
+        });
     }
   };
 
   const sauces = useMemo(() => {
-    return items.filter((item) => item.type === SAUSECES);
+    return items.filter((item: TIngredient) => item.type === SAUSECES);
   }, [items]);
 
   const buns = useMemo(() => {
-    return items.filter((item) => item.type === BUN);
+    return items.filter((item: TIngredient) => item.type === BUN);
   }, [items]);
 
   const fillings = useMemo(() => {
-    return items.filter((item) => item.type === FILLING);
+    return items.filter((item: TIngredient) => item.type === FILLING);
   }, [items]);
 
   const contentBuns = useMemo(() => {
-    return buns.map((item, index) => {
+    return buns.map((item: TIngredient, index: number) => {
       return (
         <Link
           to={`/ingredients/${item._id}`}
@@ -80,28 +87,28 @@ const BurgerIngredients = () => {
   }, [buns]);
 
   const contentSauces = useMemo(() => {
-    return sauces.map((item, index) => {
+    return sauces.map((item: TIngredient, index: number) => {
       return (
         <Link
           to={`/ingredients/${item._id}`}
           state={{ background: location }}
           key={item._id}
         >
-          <IngredientCard key={index} item={item} />{' '}
+          <IngredientCard key={index} item={item} />{" "}
         </Link>
       );
     });
   }, [sauces]);
 
   const contentFillings = useMemo(() => {
-    return fillings.map((item, index) => {
+    return fillings.map((item: TIngredient, index: number) => {
       return (
         <Link
           to={`/ingredients/${item._id}`}
           state={{ background: location }}
           key={item._id}
         >
-          <IngredientCard key={index} item={item} />{' '}
+          <IngredientCard key={index} item={item} />{" "}
         </Link>
       );
     });
@@ -161,7 +168,7 @@ const BurgerIngredients = () => {
             Начинки
           </Tab>
         </div>
-        <article
+        <div
           className={`custom-scroll ${BurgerIngredientsStyles.articleContainer}`}
           ref={refContainer}
         >
@@ -195,7 +202,7 @@ const BurgerIngredients = () => {
               {contentFillings}
             </div>
           </div>
-        </article>
+        </div>
       </section>
     </>
   );

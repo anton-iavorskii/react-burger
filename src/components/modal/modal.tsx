@@ -1,28 +1,28 @@
-import React, { useCallback, useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import ModalStyles from './modal.module.css';
-import PropTypes from 'prop-types';
-import { CloseIcon } from '@ya.praktikum/react-developer-burger-ui-components';
-import ModalOverlay from '../modal-overlay/modal-overlay';
-import {
-  handleCloseModalPropTypes,
-  childrenPropTypes,
-} from '../../utils/common-types';
+import React, { useCallback, useEffect } from "react";
+import ReactDOM from "react-dom";
+import ModalStyles from "./modal.module.css";
+import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import ModalOverlay from "../modal-overlay/modal-overlay";
+import { TModalProps } from "../../utils/types";
 
-const modalRoot = document.getElementById('react-modals');
+const modalRoot = document.getElementById("react-modals") as HTMLElement;
 
-const Modal = ({ children, isHeader, handleCloseModal }) => {
-  const escFunction = useCallback((event) => {
-    if (event.key === 'Escape') {
+const Modal = ({
+  children,
+  isHeader,
+  handleCloseModal,
+}: TModalProps): JSX.Element => {
+  const escFunction = useCallback((event: KeyboardEvent) => {
+    if (event.key === "Escape") {
       handleCloseModal();
     }
   }, []);
 
   useEffect(() => {
-    document.addEventListener('keydown', escFunction, false);
+    document.addEventListener("keydown", escFunction, false);
 
     return () => {
-      document.removeEventListener('keydown', escFunction, false);
+      document.removeEventListener("keydown", escFunction, false);
     };
   }, []);
 
@@ -48,12 +48,6 @@ const Modal = ({ children, isHeader, handleCloseModal }) => {
     </ModalOverlay>,
     modalRoot
   );
-};
-
-Modal.propTypes = {
-  children: childrenPropTypes.isRequired,
-  handleCloseModal: handleCloseModalPropTypes.isRequired,
-  isHeader: PropTypes.bool,
 };
 
 export default Modal;

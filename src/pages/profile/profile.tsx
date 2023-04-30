@@ -1,35 +1,47 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, Outlet, useMatch } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, Outlet, useMatch } from "react-router-dom";
 import {
   Button,
   Input,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-import ProfileStyles from './profile.module.css';
-import { logout, updateUser } from '../../services/actions/user';
-import useForm from '../../hooks/useForm';
-import { colorLink, mainPath, profileOrdersPath, profilePath } from '../../utils/consts';
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import ProfileStyles from "./profile.module.css";
+import { logout, updateUser } from "../../services/actions/user";
+import useForm from "../../hooks/useForm";
+import {
+  colorLink,
+  mainPath,
+  profileOrdersPath,
+  profilePath,
+} from "../../utils/consts";
 
-const Profile = () => {
+type TProfileForm = {
+  name: string;
+  email: string;
+};
+
+const Profile = (): JSX.Element => {
   const dispatch = useDispatch();
   const matchProfile = useMatch(profilePath);
-  const matchOrders = useMatch(profilePath + '/' + profileOrdersPath);
+  const matchOrders = useMatch(profilePath + "/" + profileOrdersPath);
+  // @ts-ignore   - todo: 5 sprint
   const getDataStore = (store) => {
     return {
       user: store.user.user,
     };
-  }
+  };
   const { user } = useSelector(getDataStore);
-  const [isNewData, setIsNewData] = useState(false);
+  const [isNewData, setIsNewData] = useState<boolean>(false);
 
-  const { values, handleChange, setValues } = useForm({
+  const { values, handleChange, setValues } = useForm<TProfileForm>({
     name: user.name,
     email: user.email,
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(
+      // @ts-ignore   - todo: 5 sprint
       updateUser({
         name: values.name,
         email: values.email,
@@ -41,17 +53,14 @@ const Profile = () => {
     setValues(user);
   };
 
-  const handleLogout = (e) => {
+  const handleLogout = (e: React.FormEvent) => {
     e.preventDefault();
+    // @ts-ignore   - todo: 5 sprint
     dispatch(logout());
   };
 
   useEffect(() => {
-    if (
-      user.name !== values.name ||
-      user.email !== values.email ||
-      values.password
-    ) {
+    if (user.name !== values.name || user.email !== values.email) {
       setIsNewData(true);
     } else {
       setIsNewData(false);
@@ -63,7 +72,7 @@ const Profile = () => {
       <section className={ProfileStyles.menu}>
         <span
           className={`text text_type_main-medium pt-4 pb-4 ${
-            !matchProfile && 'text_color_inactive'
+            !matchProfile && "text_color_inactive"
           }`}
         >
           <Link to={profilePath}>Профиль</Link>
@@ -71,7 +80,7 @@ const Profile = () => {
 
         <span
           className={`text text_type_main-medium pt-4 pb-4 ${
-            !matchOrders && 'text_color_inactive'
+            !matchOrders && "text_color_inactive"
           }`}
         >
           <Link to={profileOrdersPath}>История заказов</Link>
@@ -93,34 +102,34 @@ const Profile = () => {
         {matchProfile && (
           <form className={ProfileStyles.form} onSubmit={handleSubmit}>
             <Input
-              type={'text'}
-              name={'name'}
-              placeholder={'Имя'}
-              icon={'EditIcon'}
+              type={"text"}
+              name={"name"}
+              placeholder={"Имя"}
+              icon={"EditIcon"}
               value={values.name}
               onChange={handleChange}
             />
             <Input
-              type={'email'}
-              name={'email'}
-              placeholder={'Логин'}
-              icon={'EditIcon'}
+              type={"email"}
+              name={"email"}
+              placeholder={"Логин"}
+              icon={"EditIcon"}
               value={values.email}
               onChange={handleChange}
             />
             <Input
-              type={'password'}
-              name={'password'}
-              placeholder={'Пароль'}
-              icon={'EditIcon'}
-              value={''}
+              type={"password"}
+              name={"password"}
+              placeholder={"Пароль"}
+              icon={"EditIcon"}
+              value={""}
               onChange={handleChange}
             />
             {isNewData && (
               <div className={ProfileStyles.buttonsWrapper}>
                 <span
                   className="text text_type_main-default"
-                  style={{ color: colorLink, cursor: 'pointer' }}
+                  style={{ color: colorLink, cursor: "pointer" }}
                   onClick={handleCancelUpdate}
                 >
                   Отмена
