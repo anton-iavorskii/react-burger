@@ -45,7 +45,7 @@ const App = () => {
   return (
     <>
       <AppHeader />
-      <Routes>
+      <Routes location={background}>
         <Route path={mainPath} element={<MainPage />} />
         <Route path={ingredientsIdPath} element={<IngredientDetails />} />
         <Route

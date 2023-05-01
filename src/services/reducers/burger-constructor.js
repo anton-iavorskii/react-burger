@@ -1,9 +1,10 @@
-import { BUN } from '../../utils/consts';
+import { BUN } from "../../utils/consts";
 import {
   ADD_CONSTRUCTOR_INGREDIENT,
   REORDER_CONSTRUCTOR_INGREDIENTS,
   DELETE_CONSTRUCTOR_INGREDIENT,
-} from '../actions/ingredients';
+  DELETE_ALL_CONSTRUCTOR_INGREDIENTS,
+} from "../actions/ingredients";
 
 const constructorInitialState = {
   constructorItems: [],
@@ -45,6 +46,12 @@ export const constructorReducer = (state = constructorInitialState, action) => {
       return {
         ...state,
         constructorItems: updatedArray,
+      };
+    }
+    case DELETE_ALL_CONSTRUCTOR_INGREDIENTS: {
+      return {
+        ...state,
+        constructorItems: [],
       };
     }
     default: {

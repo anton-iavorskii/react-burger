@@ -1,8 +1,7 @@
-import { BASE_URL } from "./consts";
-import { checkResponse } from "./getCheckResponse";
+import request from "./request";
 
 export const refreshToken = () => {
-  return fetch(`${BASE_URL}auth/token`, {
+  return request("auth/token", {
     method: "POST",
     headers: {
       "Content-Type": "application/json;charset=utf-8",
@@ -10,7 +9,7 @@ export const refreshToken = () => {
     body: JSON.stringify({
       token: localStorage.getItem("refreshToken"),
     }),
-  }).then(checkResponse);
+  });
 };
 
 export const fetchWithRefresh = async (
@@ -22,8 +21,7 @@ export const fetchWithRefresh = async (
 ) => {
   options["Content-Type"] = "application/json";
   try {
-    const res = await fetch(url, options);
-    return await checkResponse(res);
+    request(url, options);
   } catch (err: any) {
     if (err.message === "jwt expired") {
       const refreshData = await refreshToken(); //обновляем токен
@@ -33,8 +31,7 @@ export const fetchWithRefresh = async (
       localStorage.setItem("refreshToken", refreshData.refreshToken);
       localStorage.setItem("accessToken", refreshData.accessToken);
       options.headers.authorization = refreshData.accessToken;
-      const res = await fetch(url, options); //повторяем запрос
-      return await checkResponse(res);
+      request(url, options); //повторяем запрос
     } else {
       return Promise.reject(err);
     }

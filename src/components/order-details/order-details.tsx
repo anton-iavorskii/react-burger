@@ -19,7 +19,7 @@ const OrderDetails = (): JSX.Element => {
       <span className="mt-8 mb-15 text text_type_main-medium">
         идентификатор заказа
       </span>
-      <img src={DoneIcon} alt="image" />
+      <img src={DoneIcon} alt="done icon" />
       <span className="mt-15 mb-2 text text_type_main-default">
         Ваш заказ начали готовить
       </span>

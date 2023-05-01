@@ -46,7 +46,7 @@ const IngredientCard = ({ item }: IngredientCardProps): JSX.Element => {
           {item.type === BUN ? count * 2 : count}
         </span>
       )}
-      <img className="mr-4 ml-4" src={item.image} alt="булка" />
+      <img className="mr-4 ml-4" src={item.image} alt={item.name} />
       <div className={`mt-1 mb-1 ${IngredientCardStyles.priceContainer}`}>
         <span className="text text_type_digits-default mr-2">{item.price}</span>
         <CurrencyIcon type="primary" />

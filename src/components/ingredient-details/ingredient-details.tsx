@@ -23,7 +23,7 @@ function IngredientDetails(): JSX.Element | null {
 
   return (
     <div className={IngredientDetailsStyles.wrapper}>
-      <img src={ingredient.image_large} alt="булка" />
+      <img src={ingredient.image_large} alt={ingredient.name} />
       <h2 className="mt-4 mb-8 text text_type_main-medium">
         {ingredient.name}
       </h2>

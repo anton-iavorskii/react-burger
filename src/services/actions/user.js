@@ -1,53 +1,58 @@
-import { BASE_URL } from '../../utils/consts';
-import { fetchWithRefresh } from '../../utils/fetchWithRefresh';
-import getFetch from '../../utils/getFetch';
+import { fetchWithRefresh } from "../../utils/fetchWithRefresh";
+import { request } from "../../utils/request";
 
-export const LOGIN_REQUEST = 'LOGIN_REQUEST';
-export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-export const LOGIN_FAILED = 'LOGIN_FAILED';
+export const LOGIN_REQUEST = "LOGIN_REQUEST";
+export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
+export const LOGIN_FAILED = "LOGIN_FAILED";
 
-export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
-export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
-export const LOGOUT_FAILED = 'LOGOUT_FAILED';
+export const LOGOUT_REQUEST = "LOGOUT_REQUEST";
+export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
+export const LOGOUT_FAILED = "LOGOUT_FAILED";
 
-export const REGISTER_REQUEST = 'REGISTER_REQUEST';
-export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
-export const REGISTER_FAILED = 'REGISTER_FAILED';
+export const REGISTER_REQUEST = "REGISTER_REQUEST";
+export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
+export const REGISTER_FAILED = "REGISTER_FAILED";
 
-export const FORGOT_PASSWORD_REQUEST = 'FORGOT_PASSWORD_REQUEST';
-export const FORGOT_PASSWORD_SUCCESS = 'FORGOT_PASSWORD_SUCCESS';
-export const FORGOT_PASSWORD_FAILED = 'FORGOT_PASSWORD_FAILED';
+export const FORGOT_PASSWORD_REQUEST = "FORGOT_PASSWORD_REQUEST";
+export const FORGOT_PASSWORD_SUCCESS = "FORGOT_PASSWORD_SUCCESS";
+export const FORGOT_PASSWORD_FAILED = "FORGOT_PASSWORD_FAILED";
 
-export const RESET_PASSWORD_REQUEST = 'RESET_PASSWORD_REQUEST';
-export const RESET_PASSWORD_SUCCESS = 'RESET_PASSWORD_SUCCESS';
-export const RESET_PASSWORD_FAILED = 'RESET_PASSWORD_FAILED';
+export const RESET_PASSWORD_REQUEST = "RESET_PASSWORD_REQUEST";
+export const RESET_PASSWORD_SUCCESS = "RESET_PASSWORD_SUCCESS";
+export const RESET_PASSWORD_FAILED = "RESET_PASSWORD_FAILED";
 
-export const UPDATE_USER_REQUEST = 'UPDATE_USER_REQUEST';
-export const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';
-export const UPDATE_USER_FAILED = 'UPDATE_USER_FAILED';
+export const UPDATE_USER_REQUEST = "UPDATE_USER_REQUEST";
+export const UPDATE_USER_SUCCESS = "UPDATE_USER_SUCCESS";
+export const UPDATE_USER_FAILED = "UPDATE_USER_FAILED";
 
-export const SET_USER = 'SET_USER';
-export const SET_AUTH_CHECKED = 'SET_AUTH_CHECKED';
+export const SET_USER = "SET_USER";
+export const SET_AUTH_CHECKED = "SET_AUTH_CHECKED";
 
 export const register = (body) => {
   return function (dispatch) {
     dispatch({
       type: REGISTER_REQUEST,
     });
-    getFetch('auth/register', body).then((res) => {
-      if (res && res.success) {
-        localStorage.setItem('accessToken', res.accessToken);
-        localStorage.setItem('refreshToken', res.refreshToken);
+    request("auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => {
+        localStorage.setItem("accessToken", res.accessToken);
+        localStorage.setItem("refreshToken", res.refreshToken);
         dispatch({
           type: REGISTER_SUCCESS,
           user: res.user,
         });
-      } else {
+      })
+      .catch((error) => {
         dispatch({
           type: REGISTER_FAILED,
         });
-      }
-    });
+      });
   };
 };
 
@@ -56,20 +61,26 @@ export const login = (body) => {
     dispatch({
       type: LOGIN_REQUEST,
     });
-    getFetch('auth/login', body).then((res) => {
-      if (res && res.success) {
-        localStorage.setItem('accessToken', res.accessToken);
-        localStorage.setItem('refreshToken', res.refreshToken);
+    request("auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => {
+        localStorage.setItem("accessToken", res.accessToken);
+        localStorage.setItem("refreshToken", res.refreshToken);
         dispatch({
           type: LOGIN_SUCCESS,
           user: res.user,
         });
-      } else {
+      })
+      .catch((error) => {
         dispatch({
           type: LOGIN_FAILED,
         });
-      }
-    });
+      });
   };
 };
 
@@ -78,22 +89,26 @@ export const logout = () => {
     dispatch({
       type: LOGOUT_REQUEST,
     });
-    getFetch('auth/logout', {
-      token: localStorage.getItem('refreshToken'),
-    }).then((res) => {
-      if (res && res.success) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+    request("auth/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token: localStorage.getItem("refreshToken") }),
+    })
+      .then((res) => {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         dispatch({
           type: LOGOUT_SUCCESS,
           user: null,
         });
-      } else {
+      })
+      .catch((error) => {
         dispatch({
           type: LOGIN_FAILED,
         });
-      }
-    });
+      });
   };
 };
 
@@ -102,17 +117,23 @@ export const forgotPassword = (body) => {
     dispatch({
       type: FORGOT_PASSWORD_REQUEST,
     });
-    getFetch('password-reset', body).then((res) => {
-      if (res && res.success) {
+    request("password-reset", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => {
         dispatch({
           type: FORGOT_PASSWORD_SUCCESS,
         });
-      } else {
+      })
+      .catch((error) => {
         dispatch({
           type: FORGOT_PASSWORD_FAILED,
         });
-      }
-    });
+      });
   };
 };
 
@@ -121,33 +142,38 @@ export const resetPassword = (body) => {
     dispatch({
       type: RESET_PASSWORD_REQUEST,
     });
-    getFetch('password-reset/reset', body).then((res) => {
-      if (res && res.success) {
+    request("password-reset/reset", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => {
         dispatch({
           type: RESET_PASSWORD_SUCCESS,
         });
-      } else {
+      })
+      .catch((error) => {
         dispatch({
           type: RESET_PASSWORD_FAILED,
         });
-      }
-    });
+      });
   };
 };
 
 export const updateUser = (body) => {
   body = JSON.stringify(body);
-  const requestUrl = BASE_URL + 'auth/user';
   return function (dispatch) {
     dispatch({
       type: UPDATE_USER_REQUEST,
     });
 
-    fetchWithRefresh(requestUrl, {
-      method: 'PATCH',
+    fetchWithRefresh("auth/user", {
+      method: "PATCH",
       headers: {
-        'Content-Type': 'application/json',
-        authorization: localStorage.getItem('accessToken'),
+        "Content-Type": "application/json",
+        authorization: localStorage.getItem("accessToken"),
       },
       body,
     })
@@ -164,12 +190,11 @@ export const updateUser = (body) => {
 };
 
 export const getUser = () => {
-  const requestUrl = BASE_URL + 'auth/user';
   return function (dispatch) {
-    fetchWithRefresh(requestUrl, {
-      method: 'GET',
+    fetchWithRefresh("auth/user", {
+      method: "GET",
       headers: {
-        authorization: localStorage.getItem('accessToken'),
+        authorization: localStorage.getItem("accessToken"),
       },
     })
       .then((resData) => {
@@ -179,8 +204,8 @@ export const getUser = () => {
         });
       })
       .catch((error) => {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         dispatch({ type: SET_USER, user: null });
       })
       .finally(() => dispatch({ type: SET_AUTH_CHECKED, checked: true }));
@@ -189,7 +214,7 @@ export const getUser = () => {
 
 export const checkUserAuth = () => {
   return (dispatch) => {
-    if (localStorage.getItem('accessToken')) {
+    if (localStorage.getItem("accessToken")) {
       dispatch(getUser());
     } else {
       dispatch({ type: SET_AUTH_CHECKED, checked: true });
