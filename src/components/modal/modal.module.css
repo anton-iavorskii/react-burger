@@ -1,7 +1,7 @@
 .modal {
   width: 720px;
-  position: absolute;
-  top: 13%;
+  position: fixed;
+  top: 16%;
   left: 27%;
   background: #1c1c21;
   border: 1px solid rgba(76, 76, 255, 0.2);

@@ -28,7 +28,7 @@ const Modal = ({
 
   return ReactDOM.createPortal(
     <ModalOverlay handleCloseModal={handleCloseModal}>
-      <div className={ModalStyles.modal}>
+      <div className={ModalStyles.modal} onClick={(e) => e.stopPropagation()}>
         {isHeader ? (
           <header className={`mt-10 mr-10 ml-10 ${ModalStyles.header}`}>
             <h1 className="text text_type_main-large">Детали ингредиента</h1>

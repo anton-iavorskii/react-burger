@@ -21,7 +21,7 @@ export const fetchWithRefresh = async (
 ) => {
   options["Content-Type"] = "application/json";
   try {
-    request(url, options);
+    return request(url, options);
   } catch (err: any) {
     if (err.message === "jwt expired") {
       const refreshData = await refreshToken(); //обновляем токен
@@ -31,7 +31,7 @@ export const fetchWithRefresh = async (
       localStorage.setItem("refreshToken", refreshData.refreshToken);
       localStorage.setItem("accessToken", refreshData.accessToken);
       options.headers.authorization = refreshData.accessToken;
-      request(url, options); //повторяем запрос
+      return request(url, options); //повторяем запрос
     } else {
       return Promise.reject(err);
     }
