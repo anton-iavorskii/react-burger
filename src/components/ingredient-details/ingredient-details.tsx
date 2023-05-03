@@ -1,20 +1,21 @@
-import React from 'react';
+import IngredientDetailsStyles from "./ingredient-details.module.css";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { TIngredient } from "../../utils/types";
 
-import IngredientDetailsStyles from './ingredient-details.module.css';
-import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-
-function IngredientDetails() {
+function IngredientDetails(): JSX.Element | null {
   const { id } = useParams();
-
+  // @ts-ignore  - todo: 5 sprint
   const getDataStore = (store) => {
     return {
       allIngredients: store.allIngredients.items,
     };
-  }
+  };
   const { allIngredients } = useSelector(getDataStore);
-  
-  const ingredient = allIngredients.find((item) => item._id === id);
+
+  const ingredient = allIngredients.find(
+    (item: TIngredient) => item._id === id
+  );
 
   if (!ingredient) {
     return null;
@@ -22,7 +23,7 @@ function IngredientDetails() {
 
   return (
     <div className={IngredientDetailsStyles.wrapper}>
-      <img src={ingredient.image_large} alt="булка" />
+      <img src={ingredient.image_large} alt={ingredient.name} />
       <h2 className="mt-4 mb-8 text text_type_main-medium">
         {ingredient.name}
       </h2>

@@ -1,15 +1,14 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
+import OrderDetailsStyles from "./order-details.module.css";
+import DoneIcon from "../../images/graphics.svg";
 
-import OrderDetailsStyles from './order-details.module.css';
-import DoneIcon from '../../images/graphics.svg';
-
-function OrderDetails() {
+const OrderDetails = (): JSX.Element => {
+  // @ts-ignore  - todo: 5 sprint
   const getDataStore = (store) => {
     return {
       order: store.order.order,
     };
-  }
+  };
   const { order } = useSelector(getDataStore);
 
   return (
@@ -20,7 +19,7 @@ function OrderDetails() {
       <span className="mt-8 mb-15 text text_type_main-medium">
         идентификатор заказа
       </span>
-      <img src={DoneIcon} alt="image" />
+      <img src={DoneIcon} alt="done icon" />
       <span className="mt-15 mb-2 text text_type_main-default">
         Ваш заказ начали готовить
       </span>
@@ -29,6 +28,6 @@ function OrderDetails() {
       </span>
     </div>
   );
-}
+};
 
 export default OrderDetails;

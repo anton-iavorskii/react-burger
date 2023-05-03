@@ -1,24 +1,42 @@
-import React, { useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { useDrag, useDrop } from 'react-dnd';
-import PropTypes from 'prop-types';
+import { useRef } from "react";
+import { useDispatch } from "react-redux";
+import { useDrag, useDrop } from "react-dnd";
 import {
   DragIcon,
   ConstructorElement,
-} from '@ya.praktikum/react-developer-burger-ui-components';
-import BurgerConstructorStyles from './constructor-card.module.css';
+} from "@ya.praktikum/react-developer-burger-ui-components";
+import BurgerConstructorStyles from "./constructor-card.module.css";
 import {
   DELETE_CONSTRUCTOR_INGREDIENT,
   REORDER_CONSTRUCTOR_INGREDIENTS,
-} from '../../services/actions/ingredients';
-import { dataIngredientsPropTypes } from '../../utils/common-types';
+} from "../../services/actions/ingredients";
 
-const ConstructorCard = ({ item, index }) => {
-  const ref = useRef(null);
+import { TConstructorIngredient } from "../../utils/types";
+
+type TConstructorCardProps = {
+  item: TConstructorIngredient;
+  index: number;
+};
+
+type TDragProps = {
+  index: number;
+};
+
+type Identifier = string | symbol;
+
+const ConstructorCard = ({
+  item,
+  index,
+}: TConstructorCardProps): JSX.Element => {
+  const ref = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
-  const [{ handlerId }, drop] = useDrop({
-    accept: ['constructor'],
+  const [{ handlerId }, drop] = useDrop<
+    TDragProps,
+    unknown,
+    { handlerId: Identifier | null }
+  >({
+    accept: ["constructor"],
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
@@ -40,14 +58,16 @@ const ConstructorCard = ({ item, index }) => {
       const hoverMiddleY =
         (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      const hoverClientY =
+        clientOffset && clientOffset.y - hoverBoundingRect.top;
 
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-        return;
-      }
-
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-        return;
+      if (hoverClientY) {
+        if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+          return;
+        }
+        if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+          return;
+        }
       }
 
       dispatch({
@@ -59,15 +79,18 @@ const ConstructorCard = ({ item, index }) => {
       item.index = hoverIndex;
     },
   });
-  const [{ opacity }, drag] = useDrag({
-    type: 'constructor',
-    item: () => {
-      return { index };
-    },
-    collect: (monitor) => ({
-      opacity: monitor.isDragging() ? 0.5 : 1,
-    }),
-  });
+
+  const [{ opacity }, drag] = useDrag<TDragProps, unknown, { opacity: number }>(
+    {
+      type: "constructor",
+      item: () => {
+        return { index };
+      },
+      collect: (monitor) => ({
+        opacity: monitor.isDragging() ? 0.5 : 1,
+      }),
+    }
+  );
 
   drag(drop(ref));
 
@@ -95,8 +118,3 @@ const ConstructorCard = ({ item, index }) => {
 };
 
 export default ConstructorCard;
-
-ConstructorCard.propTypes = {
-  index: PropTypes.number.isRequired,
-  item: dataIngredientsPropTypes.isRequired,
-};
