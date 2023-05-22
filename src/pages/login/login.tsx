@@ -1,6 +1,5 @@
-import React, { useCallback, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import {
   Input,
   Button,
@@ -14,6 +13,7 @@ import {
 } from "../../utils/consts";
 import { login } from "../../services/actions/user";
 import useForm from "../../hooks/useForm";
+import { useAppDispatch } from "../../services/store-types";
 
 type TLoginForm = {
   email: string;
@@ -21,7 +21,7 @@ type TLoginForm = {
 };
 
 const LoginPage = (): JSX.Element => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const { values, handleChange } = useForm<TLoginForm>({
     email: "",
@@ -31,7 +31,6 @@ const LoginPage = (): JSX.Element => {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(
-      // @ts-ignore   - todo: 5 sprint
       login({
         email: values.email,
         password: values.password,

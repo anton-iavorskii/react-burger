@@ -1,0 +1,57 @@
+.container {
+  padding: 60px 40px 40px 40px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.status {
+  color: #00cccc;
+}
+
+.ingredientsContainer {
+  max-height: 280px;
+  overflow-y: scroll;
+}
+
+.ingredient {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.wrapperImgAndName {
+  display: flex;
+  align-items: center;
+}
+
+.ingredientTotal {
+  display: flex;
+}
+
+.details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.preview {
+  height: 56px;
+  width: 56px;
+  background-color: #131316;
+  border-radius: 100px;
+  position: relative;
+  border: 2px solid #801ab2;
+  display: flex;
+}
+
+.previewImage {
+  max-width: 112px;
+  position: relative;
+  left: -24px;
+}

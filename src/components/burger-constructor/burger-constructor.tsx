@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useDrop } from "react-dnd";
 import BurgerConstructorStyles from "./burger-constructor.module.css";
@@ -19,12 +18,17 @@ import {
 import ConstructorCard from "../constructor-card/constructor-card";
 import { BUN, loginPath, mainPath } from "../../utils/consts";
 import { TConstructorIngredient } from "../../utils/types";
+import {
+  TStore,
+  useAppDispatch,
+  useAppSelector,
+} from "../../services/store-types";
 
 const BurgerConstructor = (): JSX.Element => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  // @ts-ignore  - todo: 5 sprint
-  const getDataStore = (store) => {
+
+  const getDataStore = (store: TStore) => {
     return {
       constructorItems: store.constructorBurger.constructorItems,
       isVisibleModal: store.modal.isVisibleOrderModal,
@@ -33,7 +37,7 @@ const BurgerConstructor = (): JSX.Element => {
     };
   };
   const { constructorItems, isVisibleModal, order, user } =
-    useSelector(getDataStore);
+    useAppSelector(getDataStore);
 
   const [, dropTarget] = useDrop({
     accept: "ingredient",
@@ -50,7 +54,6 @@ const BurgerConstructor = (): JSX.Element => {
         (item: TConstructorIngredient) => item._id
       );
       dispatch(
-        // @ts-ignore  - todo: 5 sprint
         getOrder({ ingredients: bun ? [...itemsId, bun._id] : [itemsId] })
       );
       dispatch({ type: GET_MODAL_ORDER_OPEN });

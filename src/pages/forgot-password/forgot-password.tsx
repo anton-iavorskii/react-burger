@@ -1,5 +1,4 @@
-import React, { useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import { Link, Navigate } from "react-router-dom";
 import {
   Input,
@@ -10,20 +9,24 @@ import ForgotPasswordStyles from "./forgot-password.module.css";
 import { colorLink, loginPath } from "../../utils/consts";
 import useForm from "../../hooks/useForm";
 import { forgotPassword } from "../../services/actions/user";
+import {
+  TStore,
+  useAppDispatch,
+  useAppSelector,
+} from "../../services/store-types";
 
 type TForgotPasswordForm = {
   email: string;
 };
 
 const ForgotPassword = (): JSX.Element => {
-  const dispatch = useDispatch();
-  // @ts-ignore   - todo: 5 sprint
-  const getDataStore = (store) => {
+  const dispatch = useAppDispatch();
+  const getDataStore = (store: TStore) => {
     return {
       isPasswordForgot: store.user.isPasswordForgot,
     };
   };
-  const { isPasswordForgot } = useSelector(getDataStore);
+  const { isPasswordForgot } = useAppSelector(getDataStore);
 
   const { values, handleChange } = useForm<TForgotPasswordForm>({
     email: "",
@@ -32,7 +35,6 @@ const ForgotPassword = (): JSX.Element => {
   const handleForgotPassword = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(
-      // @ts-ignore   - todo: 5 sprint
       forgotPassword({
         email: values.email,
       })

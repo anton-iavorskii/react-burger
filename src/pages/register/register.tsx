@@ -7,9 +7,9 @@ import {
 
 import RegisterStyles from "./register.module.css";
 import { colorLink, loginPath } from "../../utils/consts";
-import { useDispatch } from "react-redux";
 import { register } from "../../services/actions/user";
 import useForm from "../../hooks/useForm";
+import { useAppDispatch } from "../../services/store-types";
 
 type TRegisterForm = {
   name: string;
@@ -18,7 +18,7 @@ type TRegisterForm = {
 };
 
 const RegisterPage = (): JSX.Element => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const { values, handleChange } = useForm<TRegisterForm>({
     email: "",
@@ -29,7 +29,6 @@ const RegisterPage = (): JSX.Element => {
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(
-      // @ts-ignore   - todo: 5 sprint
       register({
         name: values.name,
         email: values.email,

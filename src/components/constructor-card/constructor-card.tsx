@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { useDispatch } from "react-redux";
 import { useDrag, useDrop } from "react-dnd";
 import {
   DragIcon,
@@ -12,6 +11,7 @@ import {
 } from "../../services/actions/ingredients";
 
 import { TConstructorIngredient } from "../../utils/types";
+import { useAppDispatch } from "../../services/store-types";
 
 type TConstructorCardProps = {
   item: TConstructorIngredient;
@@ -29,7 +29,7 @@ const ConstructorCard = ({
   index,
 }: TConstructorCardProps): JSX.Element => {
   const ref = useRef<HTMLDivElement>(null);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [{ handlerId }, drop] = useDrop<
     TDragProps,

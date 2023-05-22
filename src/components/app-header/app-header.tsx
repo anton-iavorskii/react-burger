@@ -34,7 +34,7 @@ const AppHeader = (): JSX.Element => {
             </Link>
           </li>
           <li className="pr-5 pl-5 mt-4 mb-4">
-            <Link to="#" style={{ display: "flex", alignItems: "center" }}>
+            <Link to="/feed" style={{ display: "flex", alignItems: "center" }}>
               <ListIcon type="secondary" />
               <span className="ml-2 mt-4 mb-4 text text_type_main-default text_color_inactive">
                 Лента заказов

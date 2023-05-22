@@ -1,5 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { TStore, useAppSelector } from "../../services/store-types";
 
 type ProtectedRouteProps = {
   onlyUnAuth?: boolean;
@@ -11,14 +11,13 @@ const ProtectedRoute = ({
   component,
 }: ProtectedRouteProps): JSX.Element | null => {
   const location = useLocation();
-  // @ts-ignore  - todo: 5 sprint
-  const getDataStore = (store) => {
+  const getDataStore = (store: TStore) => {
     return {
       user: store.user.user,
       isAuthChecked: store.user.isAuthChecked,
     };
   };
-  const { isAuthChecked, user } = useSelector(getDataStore);
+  const { isAuthChecked, user } = useAppSelector(getDataStore);
 
   if (!isAuthChecked) {
     // Запрос еще выполняется

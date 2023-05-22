@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, Outlet, useMatch } from "react-router-dom";
+import { Link, Outlet, useLocation, useMatch } from "react-router-dom";
 import {
   Button,
   Input,
@@ -14,39 +13,46 @@ import {
   profileOrdersPath,
   profilePath,
 } from "../../utils/consts";
+import {
+  TStore,
+  useAppDispatch,
+  useAppSelector,
+} from "../../services/store-types";
 
 type TProfileForm = {
-  name: string;
-  email: string;
-};
+  name: string | null;
+  email: string | null;
+} | null;
 
 const Profile = (): JSX.Element => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const location = useLocation();
   const matchProfile = useMatch(profilePath);
   const matchOrders = useMatch(profilePath + "/" + profileOrdersPath);
-  // @ts-ignore   - todo: 5 sprint
-  const getDataStore = (store) => {
+  const isOrderPath = location.pathname.includes("order");
+  const getDataStore = (store: TStore) => {
     return {
       user: store.user.user,
     };
   };
-  const { user } = useSelector(getDataStore);
+  const { user } = useAppSelector(getDataStore);
   const [isNewData, setIsNewData] = useState<boolean>(false);
 
   const { values, handleChange, setValues } = useForm<TProfileForm>({
-    name: user.name,
-    email: user.email,
+    name: user ? user.name : null,
+    email: user ? user.email : null,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(
-      // @ts-ignore   - todo: 5 sprint
-      updateUser({
-        name: values.name,
-        email: values.email,
-      })
-    );
+    if (values && values.name && values.email) {
+      dispatch(
+        updateUser({
+          name: values.name,
+          email: values.email,
+        })
+      );
+    }
   };
 
   const handleCancelUpdate = () => {
@@ -55,15 +61,16 @@ const Profile = (): JSX.Element => {
 
   const handleLogout = (e: React.FormEvent) => {
     e.preventDefault();
-    // @ts-ignore   - todo: 5 sprint
     dispatch(logout());
   };
 
   useEffect(() => {
-    if (user.name !== values.name || user.email !== values.email) {
-      setIsNewData(true);
-    } else {
-      setIsNewData(false);
+    if (user && values) {
+      if (user.name !== values.name || user.email !== values.email) {
+        setIsNewData(true);
+      } else {
+        setIsNewData(false);
+      }
     }
   }, [values]);
 
@@ -94,7 +101,9 @@ const Profile = (): JSX.Element => {
         <p className="text text_type_main-default text_color_inactive mt-20">
           В этом разделе вы можете
           <br />
-          изменить свои персональные данные
+          {isOrderPath
+            ? "посмотреть свою историю заказов"
+            : "изменить свои персональные данные"}
         </p>
       </section>
       <section>
@@ -106,7 +115,8 @@ const Profile = (): JSX.Element => {
               name={"name"}
               placeholder={"Имя"}
               icon={"EditIcon"}
-              value={values.name}
+              // @ts-ignore
+              value={values?.name}
               onChange={handleChange}
             />
             <Input
@@ -114,7 +124,8 @@ const Profile = (): JSX.Element => {
               name={"email"}
               placeholder={"Логин"}
               icon={"EditIcon"}
-              value={values.email}
+              // @ts-ignore
+              value={values?.email}
               onChange={handleChange}
             />
             <Input

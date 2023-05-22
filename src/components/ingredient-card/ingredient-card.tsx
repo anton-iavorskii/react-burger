@@ -1,22 +1,21 @@
 import React, { useMemo } from "react";
-import { useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
 
 import IngredientCardStyles from "./ingredient-card.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { BUN } from "../../utils/consts";
 import { TIngredient, TConstructorIngredient } from "../../utils/types";
+import { TStore, useAppSelector } from "../../services/store-types";
 
 type IngredientCardProps = { item: TIngredient; key: number };
 
 const IngredientCard = ({ item }: IngredientCardProps): JSX.Element => {
-  // @ts-ignore  - todo: 5 sprint
-  const getDataStore = (store) => {
+  const getDataStore = (store: TStore) => {
     return {
       constructorItems: store.constructorBurger.constructorItems,
     };
   };
-  const { constructorItems } = useSelector(getDataStore);
+  const { constructorItems } = useAppSelector(getDataStore);
 
   const count = useMemo(() => {
     const itemsInBurger = constructorItems.filter(
