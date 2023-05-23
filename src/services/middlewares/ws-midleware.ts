@@ -11,7 +11,7 @@ export const wsMiddleware = (wsActions: TWS): Middleware => {
       const { type } = action;
       const { wsInit, onOpen, onClose, onError, onMessage } = wsActions;
 
-      if (type === wsInit) {
+      if (!socket && type === wsInit) {
         socket = new WebSocket(action.payload);
       }
 
@@ -32,7 +32,12 @@ export const wsMiddleware = (wsActions: TWS): Middleware => {
 
         socket.onclose = (event) => {
           dispatch({ type: onClose, payload: event });
+          socket = null;
         };
+      }
+
+      if (type === onClose && socket && socket.readyState === 1) {
+        socket.close();
       }
 
       next(action);

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import ReactDOM from "react-dom";
 import ModalStyles from "./modal.module.css";
 import { CloseIcon } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -12,11 +12,14 @@ const Modal = ({
   isHeader,
   handleCloseModal,
 }: TModalProps): JSX.Element => {
-  const escFunction = useCallback((event: KeyboardEvent) => {
-    if (event.key === "Escape") {
-      handleCloseModal();
-    }
-  }, []);
+  const escFunction = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleCloseModal();
+      }
+    },
+    [handleCloseModal]
+  );
 
   useEffect(() => {
     document.addEventListener("keydown", escFunction, false);
@@ -24,7 +27,7 @@ const Modal = ({
     return () => {
       document.removeEventListener("keydown", escFunction, false);
     };
-  }, []);
+  }, [escFunction]);
 
   return ReactDOM.createPortal(
     <ModalOverlay handleCloseModal={handleCloseModal}>

@@ -22,7 +22,7 @@ import {
 type TProfileForm = {
   name: string | null;
   email: string | null;
-} | null;
+};
 
 const Profile = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -56,7 +56,9 @@ const Profile = (): JSX.Element => {
   };
 
   const handleCancelUpdate = () => {
-    setValues(user);
+    if (user) {
+      setValues(user);
+    }
   };
 
   const handleLogout = (e: React.FormEvent) => {
@@ -72,7 +74,7 @@ const Profile = (): JSX.Element => {
         setIsNewData(false);
       }
     }
-  }, [values]);
+  }, [values, user]);
 
   return (
     <div className={ProfileStyles.container}>
@@ -115,8 +117,7 @@ const Profile = (): JSX.Element => {
               name={"name"}
               placeholder={"Имя"}
               icon={"EditIcon"}
-              // @ts-ignore
-              value={values?.name}
+              value={values?.name as string}
               onChange={handleChange}
             />
             <Input
@@ -124,8 +125,7 @@ const Profile = (): JSX.Element => {
               name={"email"}
               placeholder={"Логин"}
               icon={"EditIcon"}
-              // @ts-ignore
-              value={values?.email}
+              value={values?.email as string}
               onChange={handleChange}
             />
             <Input

@@ -1,10 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useInView } from "react-intersection-observer";
 import BurgerIngredientsStyles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
 import { BUN, SAUSECES, FILLING } from "../../utils/consts";
 import IngredientCard from "../ingredient-card/ingredient-card";
 import { TIngredient } from "../../utils/types";
@@ -82,7 +80,7 @@ const BurgerIngredients = () => {
         </Link>
       );
     });
-  }, [buns]);
+  }, [buns, location]);
 
   const contentSauces = useMemo(() => {
     return sauces.map((item: TIngredient, index: number) => {
@@ -96,7 +94,7 @@ const BurgerIngredients = () => {
         </Link>
       );
     });
-  }, [sauces]);
+  }, [sauces, location]);
 
   const contentFillings = useMemo(() => {
     return fillings.map((item: TIngredient, index: number) => {
@@ -110,7 +108,7 @@ const BurgerIngredients = () => {
         </Link>
       );
     });
-  }, [fillings]);
+  }, [fillings, location]);
 
   useEffect(() => {
     if (

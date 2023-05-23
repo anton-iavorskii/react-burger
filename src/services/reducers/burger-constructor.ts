@@ -1,5 +1,4 @@
 import { BUN } from "../../utils/consts";
-import { TConstructorIngredient } from "../../utils/types";
 import {
   ADD_CONSTRUCTOR_INGREDIENT,
   REORDER_CONSTRUCTOR_INGREDIENTS,

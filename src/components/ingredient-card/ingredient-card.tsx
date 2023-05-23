@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useDrag } from "react-dnd";
 
 import IngredientCardStyles from "./ingredient-card.module.css";
@@ -22,7 +22,7 @@ const IngredientCard = ({ item }: IngredientCardProps): JSX.Element => {
       (elem: TConstructorIngredient) => elem._id === item._id
     );
     return itemsInBurger.length;
-  }, [constructorItems]);
+  }, [constructorItems, item]);
 
   const [{ isDrag }, dragRef] = useDrag({
     type: "ingredient",

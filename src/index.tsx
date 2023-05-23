@@ -9,13 +9,7 @@ import { compose, createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import { wsMiddleware } from "./services/middlewares/ws-midleware";
-import {
-  WS_CONNECTION_CLOSED,
-  WS_CONNECTION_FAILED,
-  WS_CONNECTION_START,
-  WS_CONNECTION_SUCCESS,
-  WS_GET_MESSAGE,
-} from "./services/actions/ws";
+import { wsActions } from "./services/actions/ws";
 
 declare global {
   interface Window {
@@ -24,14 +18,6 @@ declare global {
 }
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-export const wsActions = {
-  wsInit: WS_CONNECTION_START,
-  onOpen: WS_CONNECTION_SUCCESS,
-  onClose: WS_CONNECTION_CLOSED,
-  onError: WS_CONNECTION_FAILED,
-  onMessage: WS_GET_MESSAGE,
-};
 
 const enhancer = composeEnhancers(
   applyMiddleware(thunk, wsMiddleware(wsActions))

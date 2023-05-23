@@ -287,7 +287,6 @@ export const resetPassword = (body: TResetPasswordBody): AppThunk => {
 };
 
 export const updateUser = (body: TUpdateUserBody): AppThunk => {
-  body = JSON.stringify(body);
   return function (dispatch) {
     dispatch({
       type: UPDATE_USER_REQUEST,
@@ -297,11 +296,9 @@ export const updateUser = (body: TUpdateUserBody): AppThunk => {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        // @ts-ignore
-        authorization: localStorage.getItem("accessToken"),
+        authorization: localStorage.getItem("accessToken") as string,
       },
-      // @ts-ignore
-      body,
+      body: JSON.stringify(body),
     })
       .then((resData) => {
         dispatch({
@@ -320,8 +317,7 @@ export const getUser = (): AppThunk => {
     fetchWithRefresh("auth/user", {
       method: "GET",
       headers: {
-        // @ts-ignore
-        authorization: localStorage.getItem("accessToken"),
+        authorization: localStorage.getItem("accessToken") as string,
       },
     })
       .then((resData) => {

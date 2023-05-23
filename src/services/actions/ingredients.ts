@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from "uuid";
 import { request } from "../../utils/request";
-import { string } from "prop-types";
 import {
   TConstructorIngredient,
   TIngredient,
   TOrderResponse,
 } from "../../utils/types";
 import { AppThunk } from "../store-types";
+import { fetchWithRefresh } from "../../utils/fetchWithRefresh";
 
 export const GET_INGREDIENTS_REQUEST: "GET_INGREDIENTS_REQUEST" =
   "GET_INGREDIENTS_REQUEST";
@@ -158,10 +158,11 @@ export function getOrder(body: {
     dispatch({
       type: GET_ORDER_REQUEST,
     });
-    request("orders", {
+    fetchWithRefresh("orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization: localStorage.getItem("accessToken") as string,
       },
       body: JSON.stringify(body),
     })

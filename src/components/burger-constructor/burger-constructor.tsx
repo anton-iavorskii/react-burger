@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDrop } from "react-dnd";
 import BurgerConstructorStyles from "./burger-constructor.module.css";
@@ -16,7 +16,7 @@ import {
   addConstructorItem,
 } from "../../services/actions/ingredients";
 import ConstructorCard from "../constructor-card/constructor-card";
-import { BUN, loginPath, mainPath } from "../../utils/consts";
+import { BUN, loginPath } from "../../utils/consts";
 import { TConstructorIngredient } from "../../utils/types";
 import {
   TStore,
@@ -64,16 +64,12 @@ const BurgerConstructor = (): JSX.Element => {
     dispatch({ type: GET_MODAL_ORDER_CLOSE });
   };
 
-  const getTotalSum = (): number => {
+  const totalSum = useMemo(() => {
     return constructorItems.reduce(
       (accum: number, item: TConstructorIngredient) =>
         item.type === BUN ? accum + item.price * 2 : accum + item.price,
       0
     );
-  };
-
-  const totalSum = useMemo(() => {
-    return getTotalSum();
   }, [constructorItems]);
 
   const bun = useMemo(() => {

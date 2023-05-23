@@ -8,8 +8,8 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "../../services/store-types";
+import FeedOrdersStyle from "./feed-orders.module.css";
 import { WS_BASE_URL, feedPath } from "../../utils/consts";
-import FeedOrdersStyles from "./feed-orders.module.css";
 import { useLocation } from "react-router-dom";
 import FeedItem from "../feed-item/feed-item";
 import { Link } from "react-router-dom";
@@ -29,7 +29,7 @@ const FeedOrders = (): JSX.Element => {
   useEffect(() => {
     dispatch({
       type: WS_CONNECTION_START,
-      payload: WS_BASE_URL + "all",
+      payload: WS_BASE_URL + "/all",
     });
 
     return () => {
@@ -43,9 +43,9 @@ const FeedOrders = (): JSX.Element => {
     <>
       {orders.map((elem) => (
         <Link
+          className={FeedOrdersStyle.ordersLink}
           key={elem.number}
           to={`${feedPath}/${elem.number}`}
-          style={{ width: "99%" }}
           state={{ background: location }}
         >
           <FeedItem

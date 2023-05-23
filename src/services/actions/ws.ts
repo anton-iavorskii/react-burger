@@ -9,6 +9,14 @@ export const WS_CONNECTION_CLOSED: "WS_CONNECTION_CLOSED" =
   "WS_CONNECTION_CLOSED";
 export const WS_GET_MESSAGE: "WS_GET_MESSAGE" = "WS_GET_MESSAGE";
 
+export const wsActions = {
+  wsInit: WS_CONNECTION_START,
+  onOpen: WS_CONNECTION_SUCCESS,
+  onClose: WS_CONNECTION_CLOSED,
+  onError: WS_CONNECTION_FAILED,
+  onMessage: WS_GET_MESSAGE,
+};
+
 export interface IWSConnectionStartAction {
   readonly type: typeof WS_CONNECTION_START;
   readonly payload: string;

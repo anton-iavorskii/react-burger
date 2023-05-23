@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import AppHeader from "../app-header/app-header";
 import { getIngredients } from "../../services/actions/ingredients";
@@ -77,11 +77,11 @@ const App = () => {
             path={profileOrdersPath}
             element={<OnlyAuth component={<ProfileOrdersPage />} />}
           />
-          <Route
-            path={profileOrdersPathNumber}
-            element={<OnlyAuth component={<OrderInfo />} />}
-          />
         </Route>
+        <Route
+          path={profilePath + "/" + profileOrdersPathNumber}
+          element={<OnlyAuth component={<OrderInfo />} />}
+        />
       </Routes>
       {background && (
         <>
