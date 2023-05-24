@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import AppHeader from "../app-header/app-header";
 import { getIngredients } from "../../services/actions/ingredients";
 import { checkUserAuth } from "../../services/actions/user";
@@ -23,31 +22,37 @@ import {
   profilePath,
   profileOrdersPath,
   ingredientsIdPath,
+  feedPath,
+  feedPathNumber,
+  profileOrdersPathNumber,
 } from "../../utils/consts";
+import { useAppDispatch } from "../../services/store-types";
+import FeedPage from "../../pages/feed/feed";
+import OrderInfo from "../order-info/order-info";
 
 const App = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const background = location.state && location.state.background;
 
   const handleCloseModal = (): void => {
-    navigate(mainPath);
+    navigate(background);
   };
 
   useEffect(() => {
-    // @ts-ignore   - todo: 5 sprint
     dispatch(checkUserAuth());
-    // @ts-ignore  - todo: 5 sprint
     dispatch(getIngredients());
   }, [dispatch]);
 
   return (
     <>
       <AppHeader />
-      <Routes location={background}>
+      <Routes location={background || location}>
         <Route path={mainPath} element={<MainPage />} />
         <Route path={ingredientsIdPath} element={<IngredientDetails />} />
+        <Route path={feedPathNumber} element={<OrderInfo />} />
+        <Route path={feedPath} element={<FeedPage />} />
         <Route
           path={loginPath}
           element={<OnlyUnAuth component={<LoginPage />} />}
@@ -73,18 +78,48 @@ const App = () => {
             element={<OnlyAuth component={<ProfileOrdersPage />} />}
           />
         </Route>
+        <Route
+          path={profilePath + "/" + profileOrdersPathNumber}
+          element={<OnlyAuth component={<OrderInfo />} />}
+        />
       </Routes>
       {background && (
-        <Routes>
-          <Route
-            path={ingredientsIdPath}
-            element={
-              <Modal handleCloseModal={handleCloseModal} isHeader>
-                <IngredientDetails />
-              </Modal>
-            }
-          />
-        </Routes>
+        <>
+          <Routes>
+            <Route
+              path={ingredientsIdPath}
+              element={
+                <Modal handleCloseModal={handleCloseModal} isHeader>
+                  <IngredientDetails />
+                </Modal>
+              }
+            />
+          </Routes>
+          <Routes>
+            <Route
+              path={feedPathNumber}
+              element={
+                <Modal handleCloseModal={handleCloseModal}>
+                  <OrderInfo />
+                </Modal>
+              }
+            />
+          </Routes>
+          <Routes>
+            <Route
+              path={profilePath + "/" + profileOrdersPathNumber}
+              element={
+                <OnlyAuth
+                  component={
+                    <Modal handleCloseModal={handleCloseModal}>
+                      <OrderInfo />
+                    </Modal>
+                  }
+                />
+              }
+            />
+          </Routes>
+        </>
       )}
     </>
   );

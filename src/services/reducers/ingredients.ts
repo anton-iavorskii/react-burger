@@ -3,9 +3,11 @@ import {
   GET_INGREDIENTS_SUCCESS,
   GET_INGREDIENTS_FAILED,
   GET_INGREDIENT,
-} from '../actions/ingredients';
+  TIngredientsActions,
+} from "../actions/ingredients";
+import { TAllIngredientsState } from "../store-types";
 
-const allIngredientsInitialState = {
+const allIngredientsInitialState: TAllIngredientsState = {
   items: [],
   itemsRequest: false,
   itemsFailed: false,
@@ -14,7 +16,7 @@ const allIngredientsInitialState = {
 
 export const allIngredientsReducer = (
   state = allIngredientsInitialState,
-  action
+  action: TIngredientsActions
 ) => {
   switch (action.type) {
     case GET_INGREDIENTS_REQUEST: {

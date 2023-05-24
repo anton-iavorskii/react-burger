@@ -1,20 +1,19 @@
-import { useSelector } from "react-redux";
 import OrderDetailsStyles from "./order-details.module.css";
 import DoneIcon from "../../images/graphics.svg";
+import { TStore, useAppSelector } from "../../services/store-types";
 
 const OrderDetails = (): JSX.Element => {
-  // @ts-ignore  - todo: 5 sprint
-  const getDataStore = (store) => {
+  const getDataStore = (store: TStore) => {
     return {
       order: store.order.order,
     };
   };
-  const { order } = useSelector(getDataStore);
+  const { order } = useAppSelector(getDataStore);
 
   return (
     <div className={OrderDetailsStyles.wrapper}>
       <span className="mt-30 text text_type_digits-large">
-        {order.order.number}
+        {order && order.order.number}
       </span>
       <span className="mt-8 mb-15 text text_type_main-medium">
         идентификатор заказа

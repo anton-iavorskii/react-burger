@@ -20,3 +20,37 @@ export type TModalProps = {
   handleCloseModal: () => void;
   children: React.ReactNode;
 };
+
+export type TOrderResponse = {
+  success: boolean;
+  order: { number: number };
+};
+
+export type TUser = {
+  email: string;
+  name: string;
+};
+
+export type TRegisterBody = {
+  email: string;
+  name: string;
+  password: string;
+};
+
+export type TLoginBody = Omit<TRegisterBody, "name">;
+
+export type TUpdateUserBody = Omit<TRegisterBody, "password"> | string | null;
+
+export type TForgotPasswordBody = {
+  email: string;
+};
+
+export type TResetPasswordBody = {
+  password: string;
+  token: string;
+};
+
+export type TOrderIngredient =
+  | TIngredient & {
+      quantityInOrder: number;
+    };

@@ -4,13 +4,18 @@ import {
   REORDER_CONSTRUCTOR_INGREDIENTS,
   DELETE_CONSTRUCTOR_INGREDIENT,
   DELETE_ALL_CONSTRUCTOR_INGREDIENTS,
+  TIngredientsActions,
 } from "../actions/ingredients";
+import { TConstructorState } from "../store-types";
 
-const constructorInitialState = {
+const constructorInitialState: TConstructorState = {
   constructorItems: [],
 };
 
-export const constructorReducer = (state = constructorInitialState, action) => {
+export const constructorReducer = (
+  state = constructorInitialState,
+  action: TIngredientsActions
+) => {
   switch (action.type) {
     case ADD_CONSTRUCTOR_INGREDIENT: {
       const bun = state.constructorItems.find((item) => item.type === BUN);

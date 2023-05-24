@@ -1,30 +1,26 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { useInView } from "react-intersection-observer";
 import BurgerIngredientsStyles from "./burger-ingredients.module.css";
 import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
-import Modal from "../modal/modal";
-import IngredientDetails from "../ingredient-details/ingredient-details";
 import { BUN, SAUSECES, FILLING } from "../../utils/consts";
 import IngredientCard from "../ingredient-card/ingredient-card";
 import { TIngredient } from "../../utils/types";
+import { TStore, useAppSelector } from "../../services/store-types";
 
 const BurgerIngredients = () => {
   const location = useLocation();
-  const dispatch = useDispatch();
   const refFilling = useRef<HTMLHeadingElement>(null);
   const refBun = useRef<HTMLHeadingElement>(null);
   const refSauce = useRef<HTMLHeadingElement>(null);
   const refContainer = useRef<HTMLDivElement>(null);
   const [currentTab, setCurrentTab] = useState(BUN);
-  // @ts-ignore  - todo: 5 sprint
-  const getDataStore = (store) => {
+  const getDataStore = (store: TStore) => {
     return {
       items: store.allIngredients.items,
     };
   };
-  const { items } = useSelector(getDataStore);
+  const { items } = useAppSelector(getDataStore);
 
   const [refBunsContainer, inViewBunsContainer] = useInView({
     root: refContainer.current,
@@ -84,7 +80,7 @@ const BurgerIngredients = () => {
         </Link>
       );
     });
-  }, [buns]);
+  }, [buns, location]);
 
   const contentSauces = useMemo(() => {
     return sauces.map((item: TIngredient, index: number) => {
@@ -98,7 +94,7 @@ const BurgerIngredients = () => {
         </Link>
       );
     });
-  }, [sauces]);
+  }, [sauces, location]);
 
   const contentFillings = useMemo(() => {
     return fillings.map((item: TIngredient, index: number) => {
@@ -112,7 +108,7 @@ const BurgerIngredients = () => {
         </Link>
       );
     });
-  }, [fillings]);
+  }, [fillings, location]);
 
   useEffect(() => {
     if (

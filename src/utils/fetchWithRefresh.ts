@@ -16,7 +16,7 @@ export const fetchWithRefresh = async (
   url: string,
   options: RequestInit & {
     headers: { authorization: string };
-    ["Content-Type"]: string;
+    ["Content-Type"]?: string;
   }
 ) => {
   options["Content-Type"] = "application/json";

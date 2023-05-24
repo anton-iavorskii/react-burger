@@ -1,0 +1,11 @@
+.container {
+  max-height: calc(100vh - 250px);
+  width: 850px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+.ordersLink {
+  width: 99%;
+}

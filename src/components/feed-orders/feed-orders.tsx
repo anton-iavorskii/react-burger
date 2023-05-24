@@ -1,21 +1,20 @@
 import { useEffect } from "react";
 import {
+  WS_CONNECTION_CLOSED,
+  WS_CONNECTION_START,
+} from "../../services/actions/ws";
+import {
   TStore,
   useAppDispatch,
   useAppSelector,
 } from "../../services/store-types";
+import FeedOrdersStyle from "./feed-orders.module.css";
+import { WS_BASE_URL, feedPath } from "../../utils/consts";
 import { useLocation } from "react-router-dom";
-import {
-  WS_CONNECTION_CLOSED,
-  WS_CONNECTION_START,
-} from "../../services/actions/ws";
-
-import ProfileOrdersPageStyle from "./profile-orders.module.css";
-import { WS_BASE_URL } from "../../utils/consts";
-import FeedItem from "../../components/feed-item/feed-item";
+import FeedItem from "../feed-item/feed-item";
 import { Link } from "react-router-dom";
 
-const ProfileOrdersPage = (): JSX.Element => {
+const FeedOrders = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const location = useLocation();
 
@@ -30,10 +29,7 @@ const ProfileOrdersPage = (): JSX.Element => {
   useEffect(() => {
     dispatch({
       type: WS_CONNECTION_START,
-      payload:
-        WS_BASE_URL +
-        "?token=" +
-        localStorage.getItem("accessToken")?.replace("Bearer ", ""),
+      payload: WS_BASE_URL + "/all",
     });
 
     return () => {
@@ -44,12 +40,12 @@ const ProfileOrdersPage = (): JSX.Element => {
   }, [dispatch]);
 
   return (
-    <div className={`custom-scroll ${ProfileOrdersPageStyle.container}`}>
+    <>
       {orders.map((elem) => (
         <Link
-          className={ProfileOrdersPageStyle.ordersLink}
+          className={FeedOrdersStyle.ordersLink}
           key={elem.number}
-          to={`${elem.number}`}
+          to={`${feedPath}/${elem.number}`}
           state={{ background: location }}
         >
           <FeedItem
@@ -62,8 +58,8 @@ const ProfileOrdersPage = (): JSX.Element => {
           />
         </Link>
       ))}
-    </div>
+    </>
   );
 };
 
-export default ProfileOrdersPage;
+export default FeedOrders;

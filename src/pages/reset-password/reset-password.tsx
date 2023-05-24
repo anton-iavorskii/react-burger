@@ -1,5 +1,4 @@
-import React, { useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import { Link, Navigate } from "react-router-dom";
 import {
   Input,
@@ -10,6 +9,11 @@ import ResetPasswordStyles from "./reset-password.module.css";
 import { colorLink, loginPath } from "../../utils/consts";
 import { resetPassword } from "../../services/actions/user";
 import useForm from "../../hooks/useForm";
+import {
+  TStore,
+  useAppDispatch,
+  useAppSelector,
+} from "../../services/store-types";
 
 type TResetPasswordForm = {
   token: string;
@@ -17,14 +21,14 @@ type TResetPasswordForm = {
 };
 
 const ResetPassword = (): JSX.Element => {
-  const dispatch = useDispatch();
-  // @ts-ignore   - todo: 5 sprint
-  const getDataStore = (store) => {
+  const dispatch = useAppDispatch();
+
+  const getDataStore = (store: TStore) => {
     return {
       isPasswordForgot: store.user.isPasswordForgot,
     };
   };
-  const { isPasswordForgot } = useSelector(getDataStore);
+  const { isPasswordForgot } = useAppSelector(getDataStore);
 
   const { values, handleChange } = useForm<TResetPasswordForm>({
     password: "",
@@ -34,7 +38,6 @@ const ResetPassword = (): JSX.Element => {
   const handleResetPassword = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(
-      // @ts-ignore   - todo: 5 sprint
       resetPassword({
         password: values.password,
         token: values.token,

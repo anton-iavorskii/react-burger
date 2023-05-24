@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  width: 1240px;
+}
+
+.sectionsWrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 1240px;
+}
+
+.section {
+  width: 590px;
+  height: calc(100vh - 250px);
+}
+
+.section__scroll {
+  overflow-y: scroll;
+}

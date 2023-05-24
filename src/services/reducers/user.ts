@@ -19,16 +19,18 @@ import {
   UPDATE_USER_FAILED,
   SET_USER,
   SET_AUTH_CHECKED,
-} from '../actions/user';
+  TUserAction,
+} from "../actions/user";
+import { TUserState } from "../store-types";
 
-export const userInitialState = {
+export const userInitialState: TUserState = {
   user: null,
   isAuthChecked: false,
   isLoading: false,
   isPasswordForgot: false,
 };
 
-export const userReducer = (state = userInitialState, action) => {
+export const userReducer = (state = userInitialState, action: TUserAction) => {
   switch (action.type) {
     case REGISTER_REQUEST: {
       return {

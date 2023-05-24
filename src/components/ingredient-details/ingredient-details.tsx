@@ -1,17 +1,16 @@
 import IngredientDetailsStyles from "./ingredient-details.module.css";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { TIngredient } from "../../utils/types";
+import { TStore, useAppSelector } from "../../services/store-types";
 
 function IngredientDetails(): JSX.Element | null {
   const { id } = useParams();
-  // @ts-ignore  - todo: 5 sprint
-  const getDataStore = (store) => {
+  const getDataStore = (store: TStore) => {
     return {
       allIngredients: store.allIngredients.items,
     };
   };
-  const { allIngredients } = useSelector(getDataStore);
+  const { allIngredients } = useAppSelector(getDataStore);
 
   const ingredient = allIngredients.find(
     (item: TIngredient) => item._id === id
