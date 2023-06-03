@@ -35,7 +35,8 @@ describe("testing burger constructor", () => {
 
   it("login, drag and drop and make an order", () => {
     //login
-    cy.visit("http://localhost:3000/login");
+    cy.visit("http://localhost:3000/react-burger#/login");
+    cy.wait(1000);
     cy.get("[data-testid=testInputEmail]").type("test@test.ru");
     cy.get("[data-testid=testInputPassword]").type("test");
     cy.get("[data-testid=testBtnLogin]").click();
