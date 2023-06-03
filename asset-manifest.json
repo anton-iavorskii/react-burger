@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/react-gh-pages/static/css/main.b90ac47b.css",
+    "main.js": "/react-gh-pages/static/js/main.f45bd37c.js",
+    "static/js/787.2b4cbca8.chunk.js": "/react-gh-pages/static/js/787.2b4cbca8.chunk.js",
+    "static/media/JetBrainsMono-Bold.woff": "/react-gh-pages/static/media/JetBrainsMono-Bold.3914674f1cb2335acf26.woff",
+    "static/media/JetBrainsMono-Regular.woff": "/react-gh-pages/static/media/JetBrainsMono-Regular.f52bee61d00ce995b89f.woff",
+    "static/media/JetBrainsMono-Bold.woff2": "/react-gh-pages/static/media/JetBrainsMono-Bold.c232d532ea5a5189a278.woff2",
+    "static/media/JetBrainsMono-Regular.woff2": "/react-gh-pages/static/media/JetBrainsMono-Regular.b60380891bcf2eb241ca.woff2",
+    "static/media/iceland.woff": "/react-gh-pages/static/media/iceland.77ad7fc2baffd9305538.woff",
+    "static/media/iceland.woff2": "/react-gh-pages/static/media/iceland.4ae67a017a5ff82bbbb7.woff2",
+    "static/media/graphics.svg": "/react-gh-pages/static/media/graphics.6d4020a51e6d258e72a1298282fd63a7.svg",
+    "index.html": "/react-gh-pages/index.html",
+    "main.b90ac47b.css.map": "/react-gh-pages/static/css/main.b90ac47b.css.map",
+    "main.f45bd37c.js.map": "/react-gh-pages/static/js/main.f45bd37c.js.map",
+    "787.2b4cbca8.chunk.js.map": "/react-gh-pages/static/js/787.2b4cbca8.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b90ac47b.css",
+    "static/js/main.f45bd37c.js"
+  ]
+}
