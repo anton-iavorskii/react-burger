@@ -12,7 +12,10 @@ const OrderDetails = (): JSX.Element => {
 
   return (
     <div className={OrderDetailsStyles.wrapper}>
-      <span className="mt-30 text text_type_digits-large">
+      <span
+        className="mt-30 text text_type_digits-large"
+        data-testid={"orderNumber"}
+      >
         {order && order.order.number}
       </span>
       <span className="mt-8 mb-15 text text_type_main-medium">

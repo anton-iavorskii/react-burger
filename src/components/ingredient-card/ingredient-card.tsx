@@ -37,6 +37,7 @@ const IngredientCard = ({ item }: IngredientCardProps): JSX.Element => {
       className={`pb-10 ${IngredientCardStyles.productCard}`}
       ref={dragRef}
       key={item._id}
+      data-testid={"dragElement"}
     >
       {count !== 0 && (
         <span

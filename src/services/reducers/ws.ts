@@ -8,7 +8,7 @@ import {
 
 import { TWSState } from "../store-types";
 
-const wsInitialState: TWSState = {
+export const wsInitialState: TWSState = {
   orders: [],
   total: null,
   totalToday: null,

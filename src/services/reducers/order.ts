@@ -9,7 +9,7 @@ import {
 } from "../actions/ingredients";
 import { TOrderState } from "../store-types";
 
-const orderInitialState: TOrderState = {
+export const orderInitialState: TOrderState = {
   order: null,
   orderRequest: false,
   orderFailed: false,

@@ -8,7 +8,7 @@ import {
 } from "../actions/ingredients";
 import { TConstructorState } from "../store-types";
 
-const constructorInitialState: TConstructorState = {
+export const constructorInitialState: TConstructorState = {
   constructorItems: [],
 };
 

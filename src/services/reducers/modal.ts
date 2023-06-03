@@ -5,7 +5,7 @@ import {
 } from "../actions/ingredients";
 import { TModalState } from "../store-types";
 
-const modalInitialState: TModalState = {
+export const modalInitialState: TModalState = {
   isVisibleOrderModal: false,
 };
 

@@ -22,8 +22,15 @@ function IngredientDetails(): JSX.Element | null {
 
   return (
     <div className={IngredientDetailsStyles.wrapper}>
-      <img src={ingredient.image_large} alt={ingredient.name} />
-      <h2 className="mt-4 mb-8 text text_type_main-medium">
+      <img
+        src={ingredient.image_large}
+        alt={ingredient.name}
+        data-testid={"ingredientImage"}
+      />
+      <h2
+        className="mt-4 mb-8 text text_type_main-medium"
+        data-testid={"ingredientName"}
+      >
         {ingredient.name}
       </h2>
       <div className={`mb-15 ${IngredientDetailsStyles.compositionContainer}`}>
@@ -33,7 +40,10 @@ function IngredientDetails(): JSX.Element | null {
           >
             Калории,ккал
           </span>
-          <span className={`text text_type_digits-default text_color_inactive`}>
+          <span
+            className={`text text_type_digits-default text_color_inactive`}
+            data-testid={"calories"}
+          >
             {ingredient.calories}
           </span>
         </div>
@@ -43,7 +53,10 @@ function IngredientDetails(): JSX.Element | null {
           >
             Белки, г
           </span>
-          <span className={`text text_type_digits-default text_color_inactive`}>
+          <span
+            className={`text text_type_digits-default text_color_inactive`}
+            data-testid={"proteins"}
+          >
             {ingredient.proteins}
           </span>
         </div>
@@ -53,7 +66,10 @@ function IngredientDetails(): JSX.Element | null {
           >
             Жиры, г
           </span>
-          <span className={`text text_type_digits-default text_color_inactive`}>
+          <span
+            className={`text text_type_digits-default text_color_inactive`}
+            data-testid={"fat"}
+          >
             {ingredient.fat}
           </span>
         </div>
@@ -63,7 +79,10 @@ function IngredientDetails(): JSX.Element | null {
           >
             Углеводы, г
           </span>
-          <span className={`text text_type_digits-default text_color_inactive`}>
+          <span
+            className={`text text_type_digits-default text_color_inactive`}
+            data-testid={"carbohydrates"}
+          >
             {ingredient.carbohydrates}
           </span>
         </div>
