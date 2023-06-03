@@ -98,6 +98,7 @@ const BurgerConstructor = (): JSX.Element => {
         <div
           className={BurgerConstructorStyles.constructorItemContainer}
           ref={dropTarget}
+          data-testid={"constructorContainer"}
         >
           <div
             className={`custom-scroll ${BurgerConstructorStyles.itemWrapper}`}
@@ -146,6 +147,7 @@ const BurgerConstructor = (): JSX.Element => {
             size="medium"
             onClick={handleOpenModal}
             disabled={totalSum > 0 ? false : true}
+            data-testid={"btnMakeOrder"}
           >
             Оформить заказ
           </Button>

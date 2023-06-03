@@ -43,6 +43,7 @@ const LoginPage = (): JSX.Element => {
       <span className={`text text_type_main-medium `}>Вход</span>
       <form className={LoginStyles.form} onSubmit={handleLogin}>
         <Input
+          data-testid={"testInputEmail"}
           type={"email"}
           placeholder={"E-mail"}
           name={"email"}
@@ -52,6 +53,7 @@ const LoginPage = (): JSX.Element => {
           onChange={handleChange}
         />
         <Input
+          data-testid={"testInputPassword"}
           type={"password"}
           placeholder={"Пароль"}
           name={"password"}
@@ -61,7 +63,12 @@ const LoginPage = (): JSX.Element => {
           value={values.password}
           onChange={handleChange}
         />
-        <Button htmlType="submit" type="primary" size="large">
+        <Button
+          htmlType="submit"
+          type="primary"
+          size="large"
+          data-testid={"testBtnLogin"}
+        >
           Войти
         </Button>
       </form>

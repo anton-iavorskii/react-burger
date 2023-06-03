@@ -7,7 +7,7 @@ import {
 } from "../actions/ingredients";
 import { TAllIngredientsState } from "../store-types";
 
-const allIngredientsInitialState: TAllIngredientsState = {
+export const allIngredientsInitialState: TAllIngredientsState = {
   items: [],
   itemsRequest: false,
   itemsFailed: false,

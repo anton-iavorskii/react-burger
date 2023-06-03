@@ -31,17 +31,30 @@ const Modal = ({
 
   return ReactDOM.createPortal(
     <ModalOverlay handleCloseModal={handleCloseModal}>
-      <div className={ModalStyles.modal} onClick={(e) => e.stopPropagation()}>
+      <div
+        className={ModalStyles.modal}
+        onClick={(e) => e.stopPropagation()}
+        data-testid={"modal"}
+      >
         {isHeader ? (
           <header className={`mt-10 mr-10 ml-10 ${ModalStyles.header}`}>
-            <h1 className="text text_type_main-large">Детали ингредиента</h1>
-            <div className={ModalStyles.closeIconWrapper}>
+            <h1
+              className="text text_type_main-large"
+              data-testid={"modalTitle"}
+            >
+              Детали ингредиента
+            </h1>
+            <div
+              className={ModalStyles.closeIconWrapper}
+              data-testid={"btnCloseModal"}
+            >
               <CloseIcon type="secondary" onClick={handleCloseModal} />
             </div>
           </header>
         ) : (
           <div
             className={`mr-10 mt-15 ${ModalStyles.closeIconWrapperNoHeader}`}
+            data-testid={"btnCloseModal"}
           >
             <CloseIcon type="secondary" onClick={handleCloseModal} />
           </div>
